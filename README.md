@@ -2,6 +2,13 @@
 
 View a Git Graph of your repository, and easily perform Git actions from the graph. Configurable to look the way you want!
 
+**Quick links**
+* [Features](#features)
+* [Extension Settings](#extension-settings)
+* [Extension Commands](#extension-commands)
+* [Release Notes](#release-notes)
+* [Visual Studio Marketplace](#visual-studio-marketplace)
+
 ![Recording of Git Graph](https://github.com/mhutchie/vscode-git-graph/raw/master/resources/demo.gif)
 
 ## Features

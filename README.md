@@ -32,6 +32,18 @@ Install Git Graph from the [Visual Studio Marketplace](https://marketplace.visua
 
 Open the Command Palette (`Ctrl/Cmd + Shift + P`) and run **Git Graph: View Git Graph**.
 
+### Run locally (fastest)
+
+1. Install dependencies: `npm install`
+2. Build once: `npm run compile`
+3. Press `F5` in VS Code to launch the Extension Development Host.
+4. In the new window, open a Git repository and run **Git Graph: View Git Graph**.
+
+For iterative changes, keep a TypeScript build running in another terminal:
+
+* `npm run compile-src -- --watch`
+* `npm run compile-web -- --watch`
+
 ## Features
 
 ### Graph & history visualization

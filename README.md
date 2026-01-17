@@ -10,6 +10,7 @@ Git Graph is an open-source Visual Studio Code extension that visualizes your Gi
 
 ## Table of Contents
 
+* [Getting Started](#getting-started)
 * [Features](#features)
 * [Extension Settings](#extension-settings)
 * [Extension Commands](#extension-commands)
@@ -17,6 +18,21 @@ Git Graph is an open-source Visual Studio Code extension that visualizes your Gi
 * [Visual Studio Marketplace](#visual-studio-marketplace)
 * [Contributing](#contributing)
 * [License](#license)
+
+## Getting Started
+
+### Requirements
+
+* Visual Studio Code 1.38+.
+* Git installed and available on your PATH (or configured via `git.path`).
+
+### Install
+
+Install Git Graph from the [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=mhutchie.git-graph).
+
+### Open Git Graph
+
+Use the Command Palette (`Ctrl/Cmd + Shift + P`) and run **Git Graph: View Git Graph**.
 
 ## Features
 

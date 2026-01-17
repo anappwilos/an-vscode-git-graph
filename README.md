@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/672120/231150250-7a45ff99-b424-4a69-b70a-7d6267f8d89e.jpg" alt="Git Graph preview" />
+</p>
+
 # Git Graph extension for Visual Studio Code
 
 [![Visual Studio Marketplace Version](https://img.shields.io/visual-studio-marketplace/v/mhutchie.git-graph)](https://marketplace.visualstudio.com/items?itemName=mhutchie.git-graph)
@@ -138,6 +142,15 @@ This extension also consumes `git.path` to locate a portable Git installation.
 ## Contributing
 
 Contributions are welcome. Please read the [contributing guide](CONTRIBUTING.md) and review the [code of conduct](CODE_OF_CONDUCT.md) before opening issues or pull requests.
+
+## Como desarrollador
+
+Guía rápida para contribuir desde el repositorio:
+
+* Instalar dependencias: `npm install`
+* Compilar: `npm run compile`
+* Lint: `npm run lint`
+* Tests: `npm test`
 
 ## License
 

@@ -1,15 +1,22 @@
 # Git Graph extension for Visual Studio Code
 
-View a Git Graph of your repository, and easily perform Git actions from the graph. Configurable to look the way you want!
+[![Visual Studio Marketplace Version](https://img.shields.io/visual-studio-marketplace/v/mhutchie.git-graph)](https://marketplace.visualstudio.com/items?itemName=mhutchie.git-graph)
+[![Visual Studio Marketplace Downloads](https://img.shields.io/visual-studio-marketplace/d/mhutchie.git-graph)](https://marketplace.visualstudio.com/items?itemName=mhutchie.git-graph)
+[![License](https://img.shields.io/github/license/mhutchie/vscode-git-graph)](LICENSE)
 
-**Quick links**
+Git Graph is an open-source Visual Studio Code extension that visualizes your Git history and provides quick access to common Git actions from a single, configurable graph view.
+
+![Recording of Git Graph](https://github.com/mhutchie/vscode-git-graph/raw/master/resources/demo.gif)
+
+## Table of Contents
+
 * [Features](#features)
 * [Extension Settings](#extension-settings)
 * [Extension Commands](#extension-commands)
 * [Release Notes](#release-notes)
 * [Visual Studio Marketplace](#visual-studio-marketplace)
-
-![Recording of Git Graph](https://github.com/mhutchie/vscode-git-graph/raw/master/resources/demo.gif)
+* [Contributing](#contributing)
+* [License](#license)
 
 ## Features
 
@@ -171,6 +178,14 @@ Detailed Release Notes are available [here](CHANGELOG.md).
 ## Visual Studio Marketplace
 
 This extension is available on the [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=mhutchie.git-graph) for Visual Studio Code.
+
+## Contributing
+
+Contributions are welcome! Please read the [contributing guide](CONTRIBUTING.md) and review the [code of conduct](CODE_OF_CONDUCT.md) before opening issues or pull requests.
+
+## License
+
+This project is licensed under the terms of the [LICENSE](LICENSE).
 
 ## Acknowledgements
 

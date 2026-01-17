@@ -34,15 +34,19 @@ Open the Command Palette (`Ctrl/Cmd + Shift + P`) and run **Git Graph: View Git 
 
 ### Run locally (fastest)
 
-1. Install dependencies: `npm install`
-2. Build once: `npm run compile`
-3. Press `F5` in VS Code to launch the Extension Development Host.
-4. In the new window, open a Git repository and run **Git Graph: View Git Graph**.
+```bash
+npm install
+npm run compile
+```
 
-For iterative changes, keep a TypeScript build running in another terminal:
+Then press `F5` in VS Code to launch the Extension Development Host. In the new window, open a Git repository and run **Git Graph: View Git Graph**.
 
-* `npm run compile-src -- --watch`
-* `npm run compile-web -- --watch`
+For iterative changes, keep TypeScript compilers running in another terminal:
+
+```bash
+npm run compile-src -- --watch
+npm run compile-web -- --watch
+```
 
 ## Features
 
@@ -159,10 +163,18 @@ Contributions are welcome. Please read the [contributing guide](CONTRIBUTING.md)
 
 Guía rápida para contribuir desde el repositorio:
 
-* Instalar dependencias: `npm install`
-* Compilar: `npm run compile`
-* Lint: `npm run lint`
-* Tests: `npm test`
+```bash
+npm install
+npm run compile
+```
+
+Comandos habituales:
+
+```bash
+npm run lint
+npm test
+npm run package
+```
 
 ## License
 

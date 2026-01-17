@@ -1,12 +1,12 @@
-# Web components review and migration notes
+# Web components review and migration notes (2026 guidance)
 
-This repository splits the extension host code (`src/`) from the webview UI (`web/`). The webview modules behave like UI components and are compiled and packaged separately. This document summarizes the current webview modules and what would need to change if you want to migrate them into `src/`.
+This repository splits the extension host code (`src/`) from the webview UI (`web/`). The webview modules behave like UI components and are compiled and packaged separately. This document summarizes the current webview modules and what would need to change if you want to migrate them into `src/`, with updated guidance aligned to 2026-era best practices.
 
 ## Current webview modules ("components")
 
 | Module | Responsibility | Notes for migration |
 | --- | --- | --- |
-| `web/main.ts` | Entry point for the webview UI. | Depends on browser APIs and the webview runtime; cannot run in the extension host without a bundling + DOM shim strategy. |
+| `web/main.ts` | Entry point for the webview UI. | Depends on browser APIs and the webview runtime; cannot run in the extension host without a bundler + DOM/runtime boundary. |
 | `web/graph.ts` | Graph rendering and interactions. | Uses DOM rendering; should stay in webview or be extracted into a shared, framework-agnostic rendering layer. |
 | `web/dialog.ts` | Dialog flows in the UI. | Tied to webview UI state; migration requires refactoring UI to shared view models. |
 | `web/contextMenu.ts` | Context menu logic for the webview. | Depends on DOM event handling; keep in webview. |
@@ -27,19 +27,27 @@ The extension uses distinct build pipelines for the extension host and the webvi
 "compile-web-debug": "tsc -p ./web && node ./.vscode/package-web.js debug",
 ```
 
-## Migration options (recommended approach)
+## 2026-recommended implementation for a migration
 
-If you want to "move" web components under `src/`, there are two viable strategies:
+If you plan to migrate or reorganize webview components in 2026, the most correct approach is to **treat the webview as a separate front-end build target** and use a modern bundler with strict runtime boundaries:
 
-1. **Create a shared package for cross-runtime code**
-   - Keep UI-only modules in `web/`.
-   - Extract pure utilities (e.g., `textFormatter`, parts of `utils`) into `src/shared/` or a new `shared/` folder.
-   - Update both `tsconfig.json` files to include shared sources.
+1. **Adopt a bundler for the webview** (esbuild or Rollup)
+   - Build the webview into a single JS/CSS bundle and emit to `media/`.
+   - Replace the current `package-web.js` concatenation/minification step.
+   - Keep the extension host build (`src/`) separate and lean.
 
-2. **Adopt a bundler and unify the TS project**
-   - Move webview code under `src/web/` but keep a separate build target.
-   - Replace `compile-web` with a bundler step (esbuild/rollup) that outputs the webview assets to `media/`.
-   - This reduces duplication but still keeps different runtime targets.
+2. **Create a shared runtime-agnostic layer**
+   - Extract pure utility modules (formatters, parsing, mapping) into `src/shared/` or `shared/`.
+   - Use path aliases (TS `paths`) and include shared sources in both build targets.
+   - Avoid direct DOM usage in shared modules.
+
+3. **Introduce explicit messaging contracts**
+   - Define a small `webview-protocol.ts` with request/response types.
+   - Use compile-time checks to prevent host/webview API drift.
+
+4. **Keep `src/` and `web/` as separate roots**
+   - Even if you move files under `src/web/`, keep a separate build config for the webview.
+   - This keeps Node/Electron host dependencies isolated from browser-only code.
 
 ## What would break if you directly move everything into `src/`
 
@@ -47,4 +55,4 @@ If you want to "move" web components under `src/`, there are two viable strategi
 - Packaging scripts assume webview output is in `media/` and are driven by `web/` inputs.
 - The current `compile-web` task would no longer find `web/tsconfig.json`.
 
-If you want, I can propose an exact migration plan once you confirm which option you want.
+If you want, I can propose an exact migration plan (esbuild or Rollup) once you confirm the preferred tooling and target structure.

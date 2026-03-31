@@ -25,7 +25,8 @@ import {
 	RepoDropdownOrder,
 	SquashMessageFormat,
 	TabIconColourTheme,
-	TagType
+	TagType,
+	ToolbarButtonVisibility
 } from './types';
 
 const VIEW_COLUMN_MAPPING: { [column: string]: vscode.ViewColumn } = {
@@ -65,6 +66,7 @@ class Config {
 	get commitDetailsView(): CommitDetailsViewConfig {
 		return {
 			autoCenter: !!this.getRenamedExtensionSetting('commitDetailsView.autoCenter', 'autoCenterCommitDetailsView', true),
+			autoScroll: !!this.config.get<boolean>('commitDetailsView.autoScroll', true),
 			fileTreeCompactFolders: !!this.getRenamedExtensionSetting('commitDetailsView.fileView.fileTree.compactFolders', 'commitDetailsViewFileTreeCompactFolders', true),
 			fileViewType: this.getRenamedExtensionSetting<string>('commitDetailsView.fileView.type', 'defaultFileViewType', 'File Tree') === 'File List'
 				? FileViewType.List
@@ -81,10 +83,10 @@ class Config {
 	get contextMenuActionsVisibility(): ContextMenuActionsVisibility {
 		const userConfig = this.config.get('contextMenuActionsVisibility', {});
 		const config: ContextMenuActionsVisibility = {
-			branch: { checkout: true, rename: true, delete: true, merge: true, rebase: true, push: true, viewIssue: true, createPullRequest: true, createArchive: true, selectInBranchesDropdown: true, unselectInBranchesDropdown: true, copyName: true },
-			commit: { addTag: true, createBranch: true, checkout: true, cherrypick: true, revert: true, drop: true, merge: true, rebase: true, reset: true, copyHash: true, copySubject: true },
+			branch: { checkout: true, rename: true, delete: true, merge: true, rebase: true, push: true, pull: true, createBranch: true, viewIssue: true, createPullRequest: true, createArchive: true, selectInBranchesDropdown: true, unselectInBranchesDropdown: true, copyName: true },
+			commit: { addTag: true, createBranch: true, checkout: true, cherrypick: true, revert: true, drop: true, merge: true, rebase: true, reset: true, undo: true, editMessage: true, copyHash: true, copySubject: true },
 			commitDetailsViewFile: { viewDiff: true, viewFileAtThisRevision: true, viewDiffWithWorkingFile: true, openFile: true, markAsReviewed: true, markAsNotReviewed: true, resetFileToThisRevision: true, copyAbsoluteFilePath: true, copyRelativeFilePath: true },
-			remoteBranch: { checkout: true, delete: true, fetch: true, merge: true, pull: true, viewIssue: true, createPullRequest: true, createArchive: true, selectInBranchesDropdown: true, unselectInBranchesDropdown: true, copyName: true },
+			remoteBranch: { checkout: true, delete: true, fetch: true, merge: true, pull: true, createBranch: true, viewIssue: true, createPullRequest: true, createArchive: true, selectInBranchesDropdown: true, unselectInBranchesDropdown: true, copyName: true },
 			stash: { apply: true, createBranch: true, pop: true, drop: true, copyName: true, copyHash: true },
 			tag: { viewDetails: true, delete: true, push: true, createArchive: true, copyName: true },
 			uncommittedChanges: { stash: true, reset: true, clean: true, openSourceControlView: true }
@@ -169,6 +171,18 @@ class Config {
 	}
 
 	/**
+	 * Get the value of the `git-graph.toolbarButtonVisibility` Extension Setting.
+	 */
+	get toolbarButtonVisibility(): ToolbarButtonVisibility {
+		let obj: any = this.config.get('toolbarButtonVisibility', {});
+		if (typeof obj === 'object' && obj !== null && typeof obj['Remotes'] === 'boolean' && typeof obj['Simplify'] === 'boolean') {
+			return { remotes: obj['Remotes'], simplify: obj['Simplify'] };
+		} else {
+			return { remotes: true, simplify: true };
+		}
+	}
+
+	/**
 	 * Get the value of the `git-graph.dialog.*` Extension Settings.
 	 */
 	get dialogDefaults(): DialogDefaults {
@@ -207,6 +221,7 @@ class Config {
 			merge: {
 				noCommit: !!this.config.get('dialog.merge.noCommit', false),
 				noFastForward: !!this.config.get('dialog.merge.noFastForward', true),
+				allowUnrelatedHistories: !!this.config.get('dialog.merge.allowUnrelatedHistories', false),
 				squash: !!this.config.get('dialog.merge.squashCommits', false)
 			},
 			popStash: {
@@ -451,6 +466,20 @@ class Config {
 	}
 
 	/**
+	 * Get the value of the `git-graph.repository.singleAuthorSelect` Extension Setting.
+	 */
+	get singleAuthorSelect() {
+		return !!this.config.get('repository.singleAuthorSelect', true);
+	}
+
+	/**
+	 * Get the value of the `git-graph.repository.singleBranchSelect` Extension Setting.
+	 */
+	get singleBranchSelect() {
+		return !!this.config.get('repository.singleBranchSelect', true);
+	}
+
+	/**
 	 * Get the value of the `git-graph.repository.showCommitsOnlyReferencedByTags` Extension Setting.
 	 */
 	get showCommitsOnlyReferencedByTags() {
@@ -462,6 +491,13 @@ class Config {
 	 */
 	get showRemoteBranches() {
 		return !!this.config.get('repository.showRemoteBranches', true);
+	}
+
+	/**
+	 * Get the value of the `git-graph.repository.simplifyByDecoration` Extension Setting.
+	 */
+	get simplifyByDecoration() {
+		return !!this.config.get('repository.simplifyByDecoration', false);
 	}
 
 	/**
@@ -547,12 +583,27 @@ class Config {
 	}
 
 	/**
+	 * Get the value of the `git-graph.stickyHeader` Extension Setting.
+	 */
+	get stickyHeader() {
+		return !!this.config.get('stickyHeader', true);
+	}
+
+	/**
 	 * Get the value of the `git-graph.tabIconColourTheme` Extension Setting.
 	 */
 	get tabIconColourTheme() {
 		return this.config.get<string>('tabIconColourTheme', 'colour') === 'grey'
 			? TabIconColourTheme.Grey
 			: TabIconColourTheme.Colour;
+	}
+
+	/**
+	 * Get the value of the `git-graph.viewLocation` Extension Setting.
+	 */
+	get viewLocation(): 'editor' | 'panel' | 'both' {
+		const value = this.config.get<string>('viewLocation', 'editor');
+		return value === 'panel' || value === 'both' ? value : 'editor';
 	}
 
 	/**

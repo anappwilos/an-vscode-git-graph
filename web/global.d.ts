@@ -58,11 +58,13 @@ declare global {
 		readonly commitHead: string | null;
 		readonly avatars: AvatarImageCollection;
 		readonly currentBranches: string[] | null;
+		readonly currentAuthors: string[] | null;
 		readonly moreCommitsAvailable: boolean;
 		readonly maxCommits: number;
 		readonly onlyFollowFirstParent: boolean;
 		readonly expandedCommit: ExpandedCommit | null;
 		readonly scrollTop: number;
+		readonly selectedCommits: string[];
 		readonly findWidget: FindWidgetState;
 		readonly settingsWidget: SettingsWidgetState;
 	}

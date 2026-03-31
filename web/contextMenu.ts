@@ -3,7 +3,7 @@ const CLASS_CONTEXT_MENU_ACTIVE = 'contextMenuActive';
 interface ContextMenuAction {
 	readonly title: string;
 	readonly visible: boolean;
-	readonly onClick: () => void;
+	readonly onClick: (e?: MouseEvent) => void;
 	readonly checked?: boolean; // Required in checked context menus
 }
 
@@ -46,7 +46,7 @@ class ContextMenu {
 	 * @param className An optional class name to add to the context menu.
 	 */
 	public show(actions: ContextMenuActions, checked: boolean, target: ContextMenuTarget | null, event: MouseEvent, frameElem: HTMLElement, onClose: (() => void) | null = null, className: string | null = null) {
-		let html = '', handlers: (() => void)[] = [], handlerId = 0;
+		let html = '', handlers: ((e?: MouseEvent) => void)[] = [], handlerId = 0;
 		this.close();
 
 		for (let i = 0; i < actions.length; i++) {
@@ -54,7 +54,7 @@ class ContextMenu {
 			for (let j = 0; j < actions[i].length; j++) {
 				if (actions[i][j].visible) {
 					groupHtml += '<li class="contextMenuItem" data-index="' + handlerId++ + '">' + (checked ? '<span class="contextMenuItemCheck">' + (actions[i][j].checked ? SVG_ICONS.check : '') + '</span>' : '') + actions[i][j].title + '</li>';
-					handlers.push(actions[i][j].onClick);
+					handlers.push((e?: MouseEvent) => actions[i][j].onClick(e));
 				}
 			}
 
@@ -83,7 +83,7 @@ class ContextMenu {
 				? 2 - menuBounds.height // context menu fits above
 				: -2 - (menuBounds.height - (frameBounds.height - (event.pageY - frameBounds.top))); // Overlap the context menu vertically with the cursor
 		menu.style.left = (frameElem.scrollLeft + Math.max(event.pageX - frameBounds.left + relativeX, 2)) + 'px';
-		menu.style.top = (frameElem.scrollTop + Math.max(event.pageY - frameBounds.top + relativeY, 2)) + 'px';
+		menu.style.top = Math.max(event.clientY - frameBounds.top + relativeY, 2) + 'px';
 		menu.style.opacity = '1';
 		this.elem = menu;
 		this.onClose = onClose;
@@ -92,11 +92,18 @@ class ContextMenu {
 			// The user clicked on a context menu item => call the corresponding handler
 			e.stopPropagation();
 			this.close();
-			handlers[parseInt((<HTMLElement>(<Element>e.target).closest('.contextMenuItem')!).dataset.index!)]();
+			const handlerIndex = parseInt((<HTMLElement>(<Element>e.target).closest('.contextMenuItem')!).dataset.index!);
+			const handler = handlers[handlerIndex];
+			handler?.(e instanceof MouseEvent ? e : undefined);
 		});
 
 		menu.addEventListener('click', (e) => {
 			// The user clicked on the context menu (but not a specific item) => keep the context menu open to allow the user to reattempt clicking on a specific item
+			e.stopPropagation();
+		});
+
+		menu.addEventListener('contextmenu', (e) => {
+			// The user right-clicked on the context menu => keep the context menu open
 			e.stopPropagation();
 		});
 

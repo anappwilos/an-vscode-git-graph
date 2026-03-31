@@ -343,7 +343,7 @@ export function createPullRequest(config: PullRequestConfig, sourceOwner: string
  * @returns A promise resolving to the ErrorInfo of the executed command.
  */
 export function openExtensionSettings(): Thenable<ErrorInfo> {
-	return vscode.commands.executeCommand('workbench.action.openSettings', '@ext:mhutchie.git-graph').then(
+	return vscode.commands.executeCommand('workbench.action.openSettings', '@ext:hansu.git-graph-2').then(
 		() => null,
 		() => 'Visual Studio Code was unable to open the Git Graph Extension Settings.'
 	);
@@ -606,21 +606,21 @@ export function resolveSpawnOutput(cmd: cp.ChildProcess) {
 			});
 			cmd.on('exit', (code) => {
 				if (resolved) return;
-				resolve({ code: code, error: null });
+				resolve({ code: code ?? -1, error: null });
 				resolved = true;
 			});
 		}),
 		new Promise<Buffer>((resolve) => {
 			// stdout promise
 			let buffers: Buffer[] = [];
-			cmd.stdout.on('data', (b: Buffer) => { buffers.push(b); });
-			cmd.stdout.on('close', () => resolve(Buffer.concat(buffers)));
+			cmd.stdout!.on('data', (b: Buffer) => { buffers.push(b); });
+			cmd.stdout!.on('close', () => resolve(Buffer.concat(buffers)));
 		}),
 		new Promise<string>((resolve) => {
 			// stderr promise
 			let stderr = '';
-			cmd.stderr.on('data', (d) => { stderr += d; });
-			cmd.stderr.on('close', () => resolve(stderr));
+			cmd.stderr!.on('data', (d) => { stderr += d; });
+			cmd.stderr!.on('close', () => resolve(stderr));
 		})
 	]);
 }

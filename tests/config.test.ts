@@ -250,6 +250,25 @@ describe('Config', () => {
 				expect(value).toBe(CommitDetailsViewLocation.Inline);
 			});
 		});
+
+		describe('autoScroll', () => {
+			it('Should return true by default when the configuration value is unknown', () => {
+				const value = config.commitDetailsView.autoScroll;
+				expect(value).toBe(true);
+			});
+
+			it('Should return false when the configuration value is false', () => {
+				vscode.mockExtensionSettingReturnValue('commitDetailsView.autoScroll', false);
+				const value = config.commitDetailsView.autoScroll;
+				expect(value).toBe(false);
+			});
+
+			it('Should return true when the configuration value is true', () => {
+				vscode.mockExtensionSettingReturnValue('commitDetailsView.autoScroll', true);
+				const value = config.commitDetailsView.autoScroll;
+				expect(value).toBe(true);
+			});
+		});
 	});
 
 	describe('contextMenuActionsVisibility', () => {
@@ -287,6 +306,8 @@ describe('Config', () => {
 					merge: true,
 					rebase: true,
 					reset: true,
+					undo: true,
+					editMessage: true,
 					copyHash: true,
 					copySubject: true
 				},
@@ -369,6 +390,8 @@ describe('Config', () => {
 					merge: true,
 					rebase: true,
 					reset: true,
+					undo: true,
+					editMessage: true,
 					copyHash: true,
 					copySubject: true
 				},
@@ -469,6 +492,8 @@ describe('Config', () => {
 					merge: true,
 					rebase: true,
 					reset: true,
+					undo: true,
+					editMessage: true,
 					copyHash: true,
 					copySubject: true
 				},
@@ -857,6 +882,7 @@ describe('Config', () => {
 				'dialog.fetchRemote.pruneTags',
 				'dialog.merge.noCommit',
 				'dialog.merge.noFastForward',
+				'dialog.merge.allowUnrelatedHistories',
 				'dialog.merge.squashCommits',
 				'dialog.popStash.reinstateIndex',
 				'dialog.pullBranch.noFastForward',
@@ -883,6 +909,7 @@ describe('Config', () => {
 			expect(workspaceConfiguration.get).toBeCalledWith('dialog.general.referenceInputSpaceSubstitution', 'None');
 			expect(workspaceConfiguration.get).toBeCalledWith('dialog.merge.noCommit', false);
 			expect(workspaceConfiguration.get).toBeCalledWith('dialog.merge.noFastForward', true);
+			expect(workspaceConfiguration.get).toBeCalledWith('dialog.merge.allowUnrelatedHistories', false);
 			expect(workspaceConfiguration.get).toBeCalledWith('dialog.merge.squashCommits', false);
 			expect(workspaceConfiguration.get).toBeCalledWith('dialog.popStash.reinstateIndex', false);
 			expect(workspaceConfiguration.get).toBeCalledWith('dialog.pullBranch.noFastForward', false);
@@ -923,6 +950,7 @@ describe('Config', () => {
 				merge: {
 					noCommit: true,
 					noFastForward: true,
+					allowUnrelatedHistories: true,
 					squash: true
 				},
 				popStash: {
@@ -962,6 +990,7 @@ describe('Config', () => {
 				'dialog.fetchRemote.pruneTags',
 				'dialog.merge.noCommit',
 				'dialog.merge.noFastForward',
+				'dialog.merge.allowUnrelatedHistories',
 				'dialog.merge.squashCommits',
 				'dialog.popStash.reinstateIndex',
 				'dialog.pullBranch.noFastForward',
@@ -988,6 +1017,7 @@ describe('Config', () => {
 			expect(workspaceConfiguration.get).toBeCalledWith('dialog.general.referenceInputSpaceSubstitution', 'None');
 			expect(workspaceConfiguration.get).toBeCalledWith('dialog.merge.noCommit', false);
 			expect(workspaceConfiguration.get).toBeCalledWith('dialog.merge.noFastForward', true);
+			expect(workspaceConfiguration.get).toBeCalledWith('dialog.merge.allowUnrelatedHistories', false);
 			expect(workspaceConfiguration.get).toBeCalledWith('dialog.merge.squashCommits', false);
 			expect(workspaceConfiguration.get).toBeCalledWith('dialog.popStash.reinstateIndex', false);
 			expect(workspaceConfiguration.get).toBeCalledWith('dialog.pullBranch.noFastForward', false);
@@ -1028,6 +1058,7 @@ describe('Config', () => {
 				merge: {
 					noCommit: false,
 					noFastForward: false,
+					allowUnrelatedHistories: false,
 					squash: false
 				},
 				popStash: {
@@ -1067,6 +1098,7 @@ describe('Config', () => {
 				'dialog.fetchRemote.pruneTags',
 				'dialog.merge.noCommit',
 				'dialog.merge.noFastForward',
+				'dialog.merge.allowUnrelatedHistories',
 				'dialog.merge.squashCommits',
 				'dialog.popStash.reinstateIndex',
 				'dialog.pullBranch.noFastForward',
@@ -1093,6 +1125,7 @@ describe('Config', () => {
 			expect(workspaceConfiguration.get).toBeCalledWith('dialog.general.referenceInputSpaceSubstitution', 'None');
 			expect(workspaceConfiguration.get).toBeCalledWith('dialog.merge.noCommit', false);
 			expect(workspaceConfiguration.get).toBeCalledWith('dialog.merge.noFastForward', true);
+			expect(workspaceConfiguration.get).toBeCalledWith('dialog.merge.allowUnrelatedHistories', false);
 			expect(workspaceConfiguration.get).toBeCalledWith('dialog.merge.squashCommits', false);
 			expect(workspaceConfiguration.get).toBeCalledWith('dialog.popStash.reinstateIndex', false);
 			expect(workspaceConfiguration.get).toBeCalledWith('dialog.pullBranch.noFastForward', false);
@@ -1133,6 +1166,7 @@ describe('Config', () => {
 				merge: {
 					noCommit: true,
 					noFastForward: true,
+					allowUnrelatedHistories: true,
 					squash: true
 				},
 				popStash: {
@@ -1172,6 +1206,7 @@ describe('Config', () => {
 				'dialog.fetchRemote.pruneTags',
 				'dialog.merge.noCommit',
 				'dialog.merge.noFastForward',
+				'dialog.merge.allowUnrelatedHistories',
 				'dialog.merge.squashCommits',
 				'dialog.popStash.reinstateIndex',
 				'dialog.pullBranch.noFastForward',
@@ -1198,6 +1233,7 @@ describe('Config', () => {
 			expect(workspaceConfiguration.get).toBeCalledWith('dialog.general.referenceInputSpaceSubstitution', 'None');
 			expect(workspaceConfiguration.get).toBeCalledWith('dialog.merge.noCommit', false);
 			expect(workspaceConfiguration.get).toBeCalledWith('dialog.merge.noFastForward', true);
+			expect(workspaceConfiguration.get).toBeCalledWith('dialog.merge.allowUnrelatedHistories', false);
 			expect(workspaceConfiguration.get).toBeCalledWith('dialog.merge.squashCommits', false);
 			expect(workspaceConfiguration.get).toBeCalledWith('dialog.popStash.reinstateIndex', false);
 			expect(workspaceConfiguration.get).toBeCalledWith('dialog.pullBranch.noFastForward', false);
@@ -1238,6 +1274,7 @@ describe('Config', () => {
 				merge: {
 					noCommit: false,
 					noFastForward: false,
+					allowUnrelatedHistories: false,
 					squash: false
 				},
 				popStash: {
@@ -1288,6 +1325,7 @@ describe('Config', () => {
 			expect(workspaceConfiguration.get).toBeCalledWith('dialog.general.referenceInputSpaceSubstitution', 'None');
 			expect(workspaceConfiguration.get).toBeCalledWith('dialog.merge.noCommit', false);
 			expect(workspaceConfiguration.get).toBeCalledWith('dialog.merge.noFastForward', true);
+			expect(workspaceConfiguration.get).toBeCalledWith('dialog.merge.allowUnrelatedHistories', false);
 			expect(workspaceConfiguration.get).toBeCalledWith('dialog.merge.squashCommits', false);
 			expect(workspaceConfiguration.get).toBeCalledWith('dialog.popStash.reinstateIndex', false);
 			expect(workspaceConfiguration.get).toBeCalledWith('dialog.pullBranch.noFastForward', false);
@@ -1328,6 +1366,7 @@ describe('Config', () => {
 				merge: {
 					noCommit: false,
 					noFastForward: true,
+					allowUnrelatedHistories: false,
 					squash: false
 				},
 				popStash: {
@@ -1371,6 +1410,7 @@ describe('Config', () => {
 			expect(workspaceConfiguration.get).toBeCalledWith('dialog.general.referenceInputSpaceSubstitution', 'None');
 			expect(workspaceConfiguration.get).toBeCalledWith('dialog.merge.noCommit', false);
 			expect(workspaceConfiguration.get).toBeCalledWith('dialog.merge.noFastForward', true);
+			expect(workspaceConfiguration.get).toBeCalledWith('dialog.merge.allowUnrelatedHistories', false);
 			expect(workspaceConfiguration.get).toBeCalledWith('dialog.merge.squashCommits', false);
 			expect(workspaceConfiguration.get).toBeCalledWith('dialog.popStash.reinstateIndex', false);
 			expect(workspaceConfiguration.get).toBeCalledWith('dialog.pullBranch.noFastForward', false);
@@ -1411,6 +1451,7 @@ describe('Config', () => {
 				merge: {
 					noCommit: false,
 					noFastForward: true,
+					allowUnrelatedHistories: false,
 					squash: false
 				},
 				popStash: {
@@ -2886,6 +2927,8 @@ describe('Config', () => {
 	describe('retainContextWhenHidden', testBooleanExtensionSetting('retainContextWhenHidden', 'retainContextWhenHidden', true));
 
 	describe('showStatusBarItem', testBooleanExtensionSetting('showStatusBarItem', 'showStatusBarItem', true));
+
+	describe('stickyHeader', testBooleanExtensionSetting('stickyHeader', 'stickyHeader', true));
 
 	describe('tabIconColourTheme', () => {
 		it('Should return TabIconColourTheme.Colour when the configuration value is "colour"', () => {

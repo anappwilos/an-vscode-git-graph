@@ -139,7 +139,7 @@ export class DataSource extends Disposable {
 			this.getBranches(repo, showRemoteBranches, hideRemotes),
 			this.getRemotes(repo),
 			showStashes ? this.getStashes(repo) : Promise.resolve([]),
-			this.getTags(repo)
+			this.getTags(repo).catch(() => <string[]>[])
 		]).then((results) => {
 			/* eslint no-console: "error" */
 			return { branches: results[0].branches, head: results[0].head, remotes: results[1], stashes: results[2], tags: results[3], error: null };

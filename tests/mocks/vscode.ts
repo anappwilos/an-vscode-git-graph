@@ -25,19 +25,30 @@ export const mocks = {
 	extensionContext: {
 		asAbsolutePath: jest.fn(),
 		extensionPath: '/path/to/extension',
+		extensionUri: { scheme: 'file', path: '/path/to/extension' } as any,
+		environmentVariableCollection: {} as any,
 		globalState: {
 			get: jest.fn(),
-			update: jest.fn()
+			update: jest.fn(),
+			keys: jest.fn(() => [] as readonly string[]),
+			setKeysForSync: jest.fn()
 		},
 		globalStoragePath: '/path/to/globalStorage',
+		globalStorageUri: { scheme: 'file', path: '/path/to/globalStorage' } as any,
 		logPath: '/path/to/logs',
+		logUri: { scheme: 'file', path: '/path/to/logs' } as any,
 		storagePath: '/path/to/storage',
+		storageUri: { scheme: 'file', path: '/path/to/storage' } as any,
+		extensionMode: 1 as any,
+		secrets: {} as any,
+		extension: {} as any,
 		subscriptions: [],
 		workspaceState: {
 			get: jest.fn(),
-			update: jest.fn()
+			update: jest.fn(),
+			keys: jest.fn(() => [] as readonly string[])
 		}
-	},
+	} as unknown as vscode.ExtensionContext,
 	outputChannel: {
 		appendLine: jest.fn(),
 		dispose: jest.fn()
@@ -177,6 +188,7 @@ export const workspace = {
 		dispose: jest.fn()
 	})),
 	getConfiguration: jest.fn(() => mocks.workspaceConfiguration),
+	onDidChangeConfiguration: jest.fn((_: () => void) => ({ dispose: jest.fn() })),
 	onDidChangeWorkspaceFolders: jest.fn((_: () => Promise<void>) => ({ dispose: jest.fn() })),
 	onDidCloseTextDocument: jest.fn((_: () => void) => ({ dispose: jest.fn() })),
 	workspaceFolders: <{ uri: Uri, index: number }[] | undefined>undefined

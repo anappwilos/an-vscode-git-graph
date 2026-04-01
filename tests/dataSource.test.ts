@@ -530,7 +530,7 @@ describe('DataSource', () => {
 			date.setCurrentTime(1587559259);
 
 			// Run
-			const result = await dataSource.getCommits('/path/to/repo', null, 300, true, true, false, false, CommitOrdering.Date, ['origin'], [], []);
+			const result = await dataSource.getCommits('/path/to/repo', null, null, null, 300, true, true, false, false, CommitOrdering.Date, ['origin'], [], [], false);
 
 			// Assert
 			expect(result).toStrictEqual({
@@ -626,7 +626,7 @@ describe('DataSource', () => {
 			date.setCurrentTime(1587559259);
 
 			// Run
-			const result = await dataSource.getCommits('/path/to/repo', ['master', 'develop'], 300, true, true, false, false, CommitOrdering.AuthorDate, ['origin'], [], []);
+			const result = await dataSource.getCommits('/path/to/repo', ['master', 'develop'], null, null, 300, true, true, false, false, CommitOrdering.AuthorDate, ['origin'], [], [], false);
 
 			// Assert
 			expect(result).toStrictEqual({
@@ -712,7 +712,7 @@ describe('DataSource', () => {
 			date.setCurrentTime(1587559259);
 
 			// Run
-			const result = await dataSource.getCommits('/path/to/repo', null, 2, true, true, false, false, CommitOrdering.Topological, ['origin'], [], []);
+			const result = await dataSource.getCommits('/path/to/repo', null, null, null, 2, true, true, false, false, CommitOrdering.Topological, ['origin'], [], [], false);
 
 			// Assert
 			expect(result).toStrictEqual({
@@ -786,7 +786,7 @@ describe('DataSource', () => {
 			date.setCurrentTime(1587559259);
 
 			// Run
-			const result = await dataSource.getCommits('/path/to/repo', null, 300, true, true, false, false, CommitOrdering.Date, ['origin'], [], []);
+			const result = await dataSource.getCommits('/path/to/repo', null, null, null, 300, true, true, false, false, CommitOrdering.Date, ['origin'], [], [], false);
 
 			// Assert
 			expect(result).toStrictEqual({
@@ -860,7 +860,7 @@ describe('DataSource', () => {
 			date.setCurrentTime(1587559259);
 
 			// Run
-			const result = await dataSource.getCommits('/path/to/repo', null, 300, true, true, false, false, CommitOrdering.Date, ['origin'], [], []);
+			const result = await dataSource.getCommits('/path/to/repo', null, null, null, 300, true, true, false, false, CommitOrdering.Date, ['origin'], [], [], false);
 
 			// Assert
 			expect(result).toStrictEqual({
@@ -938,7 +938,7 @@ describe('DataSource', () => {
 			date.setCurrentTime(1587559259);
 
 			// Run
-			const result = await dataSource.getCommits('/path/to/repo', null, 300, true, true, false, false, CommitOrdering.Date, ['origin'], [], []);
+			const result = await dataSource.getCommits('/path/to/repo', null, null, null, 300, true, true, false, false, CommitOrdering.Date, ['origin'], [], [], false);
 
 			// Assert
 			expect(result).toStrictEqual({
@@ -1029,7 +1029,7 @@ describe('DataSource', () => {
 			date.setCurrentTime(1587559259);
 
 			// Run
-			const result = await dataSource.getCommits('/path/to/repo', null, 300, false, true, false, false, CommitOrdering.Date, ['origin'], [], []);
+			const result = await dataSource.getCommits('/path/to/repo', null, null, null, 300, false, true, false, false, CommitOrdering.Date, ['origin'], [], [], false);
 
 			// Assert
 			expect(result).toStrictEqual({
@@ -1120,7 +1120,7 @@ describe('DataSource', () => {
 			date.setCurrentTime(1587559259);
 
 			// Run
-			const result = await dataSource.getCommits('/path/to/repo', null, 300, true, true, false, false, CommitOrdering.Date, ['origin'], [], []);
+			const result = await dataSource.getCommits('/path/to/repo', null, null, null, 300, true, true, false, false, CommitOrdering.Date, ['origin'], [], [], false);
 
 			// Assert
 			expect(result).toStrictEqual({
@@ -1210,7 +1210,7 @@ describe('DataSource', () => {
 			date.setCurrentTime(1587559259);
 
 			// Run
-			const result = await dataSource.getCommits('/path/to/repo', null, 300, true, false, false, false, CommitOrdering.Date, ['origin'], [], []);
+			const result = await dataSource.getCommits('/path/to/repo', null, null, null, 300, true, false, false, false, CommitOrdering.Date, ['origin'], [], [], false);
 
 			// Assert
 			expect(result).toStrictEqual({
@@ -1302,7 +1302,7 @@ describe('DataSource', () => {
 			date.setCurrentTime(1587559259);
 
 			// Run
-			const result = await dataSource.getCommits('/path/to/repo', null, 300, true, true, true, false, CommitOrdering.Date, ['origin'], [], []);
+			const result = await dataSource.getCommits('/path/to/repo', null, null, null, 300, true, true, true, false, CommitOrdering.Date, ['origin'], [], [], false);
 
 			// Assert
 			expect(result).toStrictEqual({
@@ -1394,7 +1394,7 @@ describe('DataSource', () => {
 			date.setCurrentTime(1587559259);
 
 			// Run
-			const result = await dataSource.getCommits('/path/to/repo', null, 300, true, true, false, true, CommitOrdering.Date, ['origin'], [], []);
+			const result = await dataSource.getCommits('/path/to/repo', null, null, null, 300, true, true, false, true, CommitOrdering.Date, ['origin'], [], [], false);
 
 			// Assert
 			expect(result).toStrictEqual({
@@ -1489,7 +1489,7 @@ describe('DataSource', () => {
 			date.setCurrentTime(1587559259);
 
 			// Run
-			const result = await dataSource.getCommits('/path/to/repo', null, 300, true, true, false, false, CommitOrdering.Date, ['origin'], [], []);
+			const result = await dataSource.getCommits('/path/to/repo', null, null, null, 300, true, true, false, false, CommitOrdering.Date, ['origin'], [], [], false);
 
 			// Assert
 			expect(result).toStrictEqual({
@@ -1585,7 +1585,7 @@ describe('DataSource', () => {
 			date.setCurrentTime(1587559259);
 
 			// Run
-			const result = await dataSource.getCommits('/path/to/repo', null, 300, true, true, false, false, CommitOrdering.Date, ['origin', 'other-remote'], ['other-remote'], []);
+			const result = await dataSource.getCommits('/path/to/repo', null, null, null, 300, true, true, false, false, CommitOrdering.Date, ['origin', 'other-remote'], ['other-remote'], [], false);
 
 			// Assert
 			expect(result).toStrictEqual({
@@ -1676,7 +1676,7 @@ describe('DataSource', () => {
 			date.setCurrentTime(1587559259);
 
 			// Run
-			const result = await dataSource.getCommits('/path/to/repo', null, 300, true, true, false, false, CommitOrdering.Date, ['origin'], [], [
+			const result = await dataSource.getCommits('/path/to/repo', null, null, null, 300, true, true, false, false, CommitOrdering.Date, ['origin'], [], [
 				{
 					hash: '1a2b3c4d5e6f1a2b3c4d5e6f1a2b3c4d5e6f1a2b',
 					baseHash: '2b3c4d5e6f1a2b3c4d5e6f1a2b3c4d5e6f1a2b3c',
@@ -1687,7 +1687,7 @@ describe('DataSource', () => {
 					date: 1587559258,
 					message: 'WIP'
 				}
-			]);
+			], false);
 
 			// Assert
 			expect(result).toStrictEqual({
@@ -1780,7 +1780,7 @@ describe('DataSource', () => {
 			date.setCurrentTime(1587559259);
 
 			// Run
-			const result = await dataSource.getCommits('/path/to/repo', null, 300, true, true, false, false, CommitOrdering.Date, ['origin'], [], [
+			const result = await dataSource.getCommits('/path/to/repo', null, null, null, 300, true, true, false, false, CommitOrdering.Date, ['origin'], [], [
 				{
 					hash: 'a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2',
 					baseHash: '1a2b3c4d5e6f1a2b3c4d5e6f1a2b3c4d5e6f1a2b',
@@ -1801,7 +1801,7 @@ describe('DataSource', () => {
 					date: 1587559258,
 					message: 'WIP 2'
 				}
-			]);
+			], false);
 
 			// Assert
 			expect(result).toStrictEqual({
@@ -1922,7 +1922,7 @@ describe('DataSource', () => {
 			date.setCurrentTime(1587559259);
 
 			// Run
-			const result = await dataSource.getCommits('/path/to/repo', null, 300, true, true, false, false, CommitOrdering.Date, ['origin'], [], [
+			const result = await dataSource.getCommits('/path/to/repo', null, null, null, 300, true, true, false, false, CommitOrdering.Date, ['origin'], [], [
 				{
 					hash: 'a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2',
 					baseHash: '1a2b3c4d5e6f1a2b3c4d5e6f1a2b3c4d5e6f1a2b',
@@ -1943,7 +1943,7 @@ describe('DataSource', () => {
 					date: 1587559260,
 					message: 'WIP 2'
 				}
-			]);
+			], false);
 
 			// Assert
 			expect(result).toStrictEqual({
@@ -2064,7 +2064,7 @@ describe('DataSource', () => {
 			date.setCurrentTime(1587559259);
 
 			// Run
-			const result = await dataSource.getCommits('/path/to/repo', null, 300, true, true, false, false, CommitOrdering.Date, ['origin'], [], [
+			const result = await dataSource.getCommits('/path/to/repo', null, null, null, 300, true, true, false, false, CommitOrdering.Date, ['origin'], [], [
 				{
 					hash: 'a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2',
 					baseHash: '6f1a2b3c4d5e6f1a2b3c4d5e6f1a2b3c4d5e6f1a',
@@ -2075,7 +2075,7 @@ describe('DataSource', () => {
 					date: 1587559258,
 					message: 'WIP 1'
 				}
-			]);
+			], false);
 
 			// Assert
 			expect(result).toStrictEqual({
@@ -2163,7 +2163,7 @@ describe('DataSource', () => {
 			date.setCurrentTime(1587559259);
 
 			// Run
-			const result = await dataSource.getCommits('/path/to/repo', null, 300, true, true, false, false, CommitOrdering.Date, ['origin'], [], []);
+			const result = await dataSource.getCommits('/path/to/repo', null, null, null, 300, true, true, false, false, CommitOrdering.Date, ['origin'], [], [], false);
 
 			// Assert
 			expect(result).toStrictEqual({
@@ -2223,7 +2223,7 @@ describe('DataSource', () => {
 			vscode.mockExtensionSettingReturnValue('repository.showRemoteHeads', true);
 
 			// Run
-			const result = await dataSource.getCommits('/path/to/repo', null, 300, true, true, false, false, CommitOrdering.Date, ['origin'], [], []);
+			const result = await dataSource.getCommits('/path/to/repo', null, null, null, 300, true, true, false, false, CommitOrdering.Date, ['origin'], [], [], false);
 
 			// Assert
 			expect(result).toStrictEqual({
@@ -2267,7 +2267,7 @@ describe('DataSource', () => {
 			date.setCurrentTime(1587559259);
 
 			// Run
-			const result = await dataSource.getCommits('/path/to/repo', null, 300, true, true, false, false, CommitOrdering.Date, ['origin'], [], []);
+			const result = await dataSource.getCommits('/path/to/repo', null, null, null, 300, true, true, false, false, CommitOrdering.Date, ['origin'], [], [], false);
 
 			// Assert
 			expect(result).toStrictEqual({
@@ -2347,7 +2347,7 @@ describe('DataSource', () => {
 			vscode.mockExtensionSettingReturnValue('repository.showRemoteHeads', true);
 
 			// Run
-			const result = await dataSource.getCommits('/path/to/repo', null, 300, true, true, false, false, CommitOrdering.Date, ['origin'], [], []);
+			const result = await dataSource.getCommits('/path/to/repo', null, null, null, 300, true, true, false, false, CommitOrdering.Date, ['origin'], [], [], false);
 
 			// Assert
 			expect(result).toStrictEqual({
@@ -2371,7 +2371,7 @@ describe('DataSource', () => {
 			vscode.mockExtensionSettingReturnValue('repository.showRemoteHeads', true);
 
 			// Run
-			const result = await dataSource.getCommits('/path/to/repo', null, 300, true, true, false, false, CommitOrdering.Date, ['origin'], [], []);
+			const result = await dataSource.getCommits('/path/to/repo', null, null, null, 300, true, true, false, false, CommitOrdering.Date, ['origin'], [], [], false);
 
 			// Assert
 			expect(result).toStrictEqual({

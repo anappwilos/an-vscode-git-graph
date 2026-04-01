@@ -11,7 +11,8 @@ import { ConfigurationChangeEvent } from 'vscode';
 import { AvatarEvent, AvatarManager } from '../src/avatarManager';
 import { DataSource } from '../src/dataSource';
 import { ExtensionState } from '../src/extensionState';
-import { GitGraphView, standardiseCspSource } from '../src/gitGraphView';
+import { GitGraphView } from '../src/gitGraphView';
+import { standardiseCspSource } from '../src/baseGitGraphView';
 import { Logger } from '../src/logger';
 import { RepoChangeEvent, RepoManager } from '../src/repoManager';
 import { CodeReview, CommitOrdering, GitCommitStash, GitConfigLocation, GitFileStatus, GitGraphViewGlobalState, GitGraphViewWorkspaceState, GitPushBranchMode, GitResetMode, MergeActionOn, PullRequestConfig, PullRequestProvider, RebaseActionOn, RequestMessage, ResponseMessage, TagType } from '../src/types';
@@ -2157,6 +2158,8 @@ describe('GitGraphView', () => {
 					repo: '/path/to/repo',
 					refreshId: 2,
 					branches: null,
+					authors: null,
+					tags: null,
 					maxCommits: 300,
 					showTags: true,
 					showRemoteBranches: false,
@@ -2165,12 +2168,13 @@ describe('GitGraphView', () => {
 					commitOrdering: CommitOrdering.Date,
 					remotes: ['origin', 'upstream'],
 					hideRemotes: ['upstream'],
-					stashes: []
+					stashes: [],
+					simplifyByDecoration: false
 				});
 
 				// Assert
 				await waitForExpect(() => {
-					expect(spyOnGetCommits).toHaveBeenCalledWith('/path/to/repo', null, 300, true, false, false, false, CommitOrdering.Date, ['origin', 'upstream'], ['upstream'], []);
+					expect(spyOnGetCommits).toHaveBeenCalledWith('/path/to/repo', null, null, null, 300, true, false, false, false, CommitOrdering.Date, ['origin', 'upstream'], ['upstream'], [], false);
 					expect(messages).toStrictEqual([
 						{
 							command: 'loadCommits',
@@ -2198,6 +2202,8 @@ describe('GitGraphView', () => {
 					repo: '/path/to/repo',
 					refreshId: 2,
 					branches: null,
+					authors: null,
+					tags: null,
 					maxCommits: 300,
 					showTags: false,
 					showRemoteBranches: true,
@@ -2206,12 +2212,13 @@ describe('GitGraphView', () => {
 					commitOrdering: CommitOrdering.Date,
 					remotes: ['origin', 'upstream'],
 					hideRemotes: ['upstream'],
-					stashes: []
+					stashes: [],
+					simplifyByDecoration: false
 				});
 
 				// Assert
 				await waitForExpect(() => {
-					expect(spyOnGetCommits).toHaveBeenCalledWith('/path/to/repo', null, 300, false, true, false, false, CommitOrdering.Date, ['origin', 'upstream'], ['upstream'], []);
+					expect(spyOnGetCommits).toHaveBeenCalledWith('/path/to/repo', null, null, null, 300, false, true, false, false, CommitOrdering.Date, ['origin', 'upstream'], ['upstream'], [], false);
 					expect(messages).toStrictEqual([
 						{
 							command: 'loadCommits',
@@ -2239,6 +2246,8 @@ describe('GitGraphView', () => {
 					repo: '/path/to/repo',
 					refreshId: 2,
 					branches: null,
+					authors: null,
+					tags: null,
 					maxCommits: 300,
 					showTags: false,
 					showRemoteBranches: false,
@@ -2247,12 +2256,13 @@ describe('GitGraphView', () => {
 					commitOrdering: CommitOrdering.Date,
 					remotes: ['origin', 'upstream'],
 					hideRemotes: ['upstream'],
-					stashes: []
+					stashes: [],
+					simplifyByDecoration: false
 				});
 
 				// Assert
 				await waitForExpect(() => {
-					expect(spyOnGetCommits).toHaveBeenCalledWith('/path/to/repo', null, 300, false, false, true, false, CommitOrdering.Date, ['origin', 'upstream'], ['upstream'], []);
+					expect(spyOnGetCommits).toHaveBeenCalledWith('/path/to/repo', null, null, null, 300, false, false, true, false, CommitOrdering.Date, ['origin', 'upstream'], ['upstream'], [], false);
 					expect(messages).toStrictEqual([
 						{
 							command: 'loadCommits',
@@ -2280,6 +2290,8 @@ describe('GitGraphView', () => {
 					repo: '/path/to/repo',
 					refreshId: 2,
 					branches: null,
+					authors: null,
+					tags: null,
 					maxCommits: 300,
 					showTags: false,
 					showRemoteBranches: false,
@@ -2288,12 +2300,13 @@ describe('GitGraphView', () => {
 					commitOrdering: CommitOrdering.Date,
 					remotes: ['origin', 'upstream'],
 					hideRemotes: ['upstream'],
-					stashes: []
+					stashes: [],
+					simplifyByDecoration: false
 				});
 
 				// Assert
 				await waitForExpect(() => {
-					expect(spyOnGetCommits).toHaveBeenCalledWith('/path/to/repo', null, 300, false, false, false, true, CommitOrdering.Date, ['origin', 'upstream'], ['upstream'], []);
+					expect(spyOnGetCommits).toHaveBeenCalledWith('/path/to/repo', null, null, null, 300, false, false, false, true, CommitOrdering.Date, ['origin', 'upstream'], ['upstream'], [], false);
 					expect(messages).toStrictEqual([
 						{
 							command: 'loadCommits',
@@ -2319,6 +2332,7 @@ describe('GitGraphView', () => {
 					head: 'master',
 					remotes: ['origin', 'upstream'],
 					stashes: [],
+					tags: [],
 					error: null
 				};
 				const spyOnGetRepoInfo = jest.spyOn(dataSource, 'getRepoInfo');
@@ -2336,6 +2350,7 @@ describe('GitGraphView', () => {
 					refreshId: 0,
 					showRemoteBranches: true,
 					showStashes: false,
+					simplifyByDecoration: false,
 					hideRemotes: ['upstream']
 				});
 
@@ -2353,6 +2368,7 @@ describe('GitGraphView', () => {
 							head: getRepoInfoResolvedValue.head,
 							remotes: getRepoInfoResolvedValue.remotes,
 							stashes: getRepoInfoResolvedValue.stashes,
+						tags: getRepoInfoResolvedValue.tags,
 							isRepo: true,
 							error: getRepoInfoResolvedValue.error
 						}
@@ -2369,6 +2385,7 @@ describe('GitGraphView', () => {
 					head: 'master',
 					remotes: ['origin', 'upstream'],
 					stashes: [],
+					tags: [],
 					error: null
 				};
 				const spyOnGetRepoInfo = jest.spyOn(dataSource, 'getRepoInfo');
@@ -2385,6 +2402,7 @@ describe('GitGraphView', () => {
 					refreshId: 1,
 					showRemoteBranches: true,
 					showStashes: false,
+					simplifyByDecoration: false,
 					hideRemotes: ['upstream']
 				});
 
@@ -2402,6 +2420,7 @@ describe('GitGraphView', () => {
 							head: getRepoInfoResolvedValue.head,
 							remotes: getRepoInfoResolvedValue.remotes,
 							stashes: getRepoInfoResolvedValue.stashes,
+						tags: getRepoInfoResolvedValue.tags,
 							isRepo: true,
 							error: getRepoInfoResolvedValue.error
 						}
@@ -2418,6 +2437,7 @@ describe('GitGraphView', () => {
 					head: 'master',
 					remotes: ['origin', 'upstream'],
 					stashes: [],
+					tags: [],
 					error: 'error message'
 				};
 				const spyOnGetRepoInfo = jest.spyOn(dataSource, 'getRepoInfo');
@@ -2435,6 +2455,7 @@ describe('GitGraphView', () => {
 					refreshId: 2,
 					showRemoteBranches: true,
 					showStashes: false,
+					simplifyByDecoration: false,
 					hideRemotes: ['upstream']
 				});
 
@@ -2452,6 +2473,7 @@ describe('GitGraphView', () => {
 							head: getRepoInfoResolvedValue.head,
 							remotes: getRepoInfoResolvedValue.remotes,
 							stashes: getRepoInfoResolvedValue.stashes,
+						tags: getRepoInfoResolvedValue.tags,
 							isRepo: true,
 							error: getRepoInfoResolvedValue.error
 						}
@@ -2468,6 +2490,7 @@ describe('GitGraphView', () => {
 					head: 'master',
 					remotes: ['origin', 'upstream'],
 					stashes: [],
+					tags: [],
 					error: 'error message'
 				};
 				const spyOnGetRepoInfo = jest.spyOn(dataSource, 'getRepoInfo');
@@ -2485,6 +2508,7 @@ describe('GitGraphView', () => {
 					refreshId: 3,
 					showRemoteBranches: true,
 					showStashes: false,
+					simplifyByDecoration: false,
 					hideRemotes: ['upstream']
 				});
 
@@ -2502,6 +2526,7 @@ describe('GitGraphView', () => {
 							head: getRepoInfoResolvedValue.head,
 							remotes: getRepoInfoResolvedValue.remotes,
 							stashes: getRepoInfoResolvedValue.stashes,
+						tags: getRepoInfoResolvedValue.tags,
 							isRepo: false,
 							error: null
 						}

@@ -13,6 +13,7 @@ class GitGraphView {
 	private avatars: AvatarImageCollection = {};
 	private currentBranches: string[] | null = null;
 	private currentAuthors: string[] | null = null;
+	private currentTags: string[] | null = null;
 
 	private currentRepo!: string;
 	private currentRepoLoading: boolean = true;
@@ -48,6 +49,7 @@ class GitGraphView {
 	private readonly repoDropdown: Dropdown;
 	private readonly branchDropdown: Dropdown;
 	private readonly authorDropdown: Dropdown;
+	private readonly tagDropdown: Dropdown;
 
 	private readonly viewElem: HTMLElement;
 	private readonly controlsElem: HTMLElement;
@@ -101,6 +103,13 @@ class GitGraphView {
 			this.clearCommits();
 			this.requestLoadRepoInfoAndCommits(true, true);
 		}, this.config.singleAuthorSelect);
+		this.tagDropdown = new Dropdown('tagDropdown', false, true, 'Tags', (values) => {
+			this.currentTags = values;
+			this.maxCommits = this.config.initialLoadCommits;
+			this.saveState();
+			this.clearCommits();
+			this.requestLoadRepoInfoAndCommits(true, true);
+		});
 		this.showRemoteBranchesElem = <HTMLInputElement>document.getElementById('showRemoteBranchesCheckbox')!;
 		this.showRemoteBranchesElem.addEventListener('change', () => {
 			this.saveRepoStateValue(this.currentRepo, 'showRemoteBranchesV2', this.showRemoteBranchesElem.checked ? GG.BooleanOverride.Enabled : GG.BooleanOverride.Disabled);
@@ -137,6 +146,7 @@ class GitGraphView {
 			this.currentRepo = prevState.currentRepo;
 			this.currentBranches = prevState.currentBranches;
 			this.currentAuthors = prevState.currentAuthors;
+			this.currentTags = prevState.currentTags;
 			this.maxCommits = prevState.maxCommits;
 			this.expandedCommit = prevState.expandedCommit;
 			this.avatars = prevState.avatars;
@@ -240,6 +250,7 @@ class GitGraphView {
 		this.gitTags = [];
 		this.currentBranches = null;
 		this.currentAuthors = [];
+		this.currentTags = null;
 		this.renderFetchButton();
 		this.closeCommitDetails(false);
 		this.settingsWidget.close();
@@ -300,10 +311,17 @@ class GitGraphView {
 		filterCurrentBranches();
 
 		this.saveState();
+		if (this.currentAuthors === null || this.currentAuthors.length === 0) {
+			this.currentAuthors = [SHOW_ALL_BRANCHES];
+		}
+		if (this.currentTags === null || this.currentTags.length === 0) {
+			this.currentTags = [SHOW_ALL_BRANCHES];
+		}
 
 		// Set up branch dropdown options
 		this.branchDropdown.setOptions(this.getBranchOptions(true), this.currentBranches);
 		this.authorDropdown.setOptions(this.getAuthorOptions(), this.currentAuthors);
+		this.tagDropdown.setOptions(this.getTagOptions(), this.currentTags);
 
 		// Remove hidden remotes that no longer exist
 		let hiddenRemotes = this.gitRepos[this.currentRepo].hideRemotes;
@@ -336,6 +354,16 @@ class GitGraphView {
 		// This list of tags is just used to provide additional information in the dialogs. Tag information included in commits is used for all other purposes (e.g. rendering, context menus)
 		const tagsChanged = !arraysStrictlyEqual(this.gitTags, tags);
 		this.gitTags = tags;
+		if (tagsChanged) {
+			if (this.currentTags !== null && !(this.currentTags.length === 1 && this.currentTags[0] === SHOW_ALL_BRANCHES)) {
+				// Filter any tags that are currently selected, but no longer exist
+				this.currentTags = this.currentTags.filter((tag) => this.gitTags.includes(tag));
+			}
+			if (this.currentTags === null || this.currentTags.length === 0) {
+				this.currentTags = [SHOW_ALL_BRANCHES];
+			}
+			this.tagDropdown.setOptions(this.getTagOptions(), this.currentTags);
+		}
 
 		if (!this.currentRepoLoading && !this.currentRepoRefreshState.hard && this.moreCommitsAvailable === moreAvailable && this.onlyFollowFirstParent === onlyFollowFirstParent && this.commitHead === commitHead && commits.length > 0 && arraysEqual(this.commits, commits, (a, b) =>
 			a.hash === b.hash &&
@@ -527,6 +555,7 @@ class GitGraphView {
 		}
 		this.settingsWidget.refresh();
 		this.authorDropdown.setOptions(this.getAuthorOptions(), this.currentAuthors);
+		this.tagDropdown.setOptions(this.getTagOptions(), this.currentTags);
 	}
 
 	private displayLoadDataError(message: string, reason: string) {
@@ -579,6 +608,14 @@ class GitGraphView {
 				const author = this!.gitConfig!.authors[i];
 				options.push({ name: author.name, value: author.name });
 			}
+		}
+		return options;
+	}
+	public getTagOptions(): ReadonlyArray<DialogSelectInputOption> {
+		const options: DialogSelectInputOption[] = [];
+		options.push({ name: 'All', value: SHOW_ALL_BRANCHES });
+		for (let i = 0; i < this.gitTags.length; i++) {
+			options.push({ name: this.gitTags[i], value: this.gitTags[i] });
 		}
 		return options;
 	}
@@ -667,6 +704,7 @@ class GitGraphView {
 			refreshId: ++this.currentRepoRefreshState.loadCommitsRefreshId,
 			branches: this.currentBranches === null || (this.currentBranches.length === 1 && this.currentBranches[0] === SHOW_ALL_BRANCHES) ? null : this.currentBranches,
 			authors: this.currentAuthors === null || (this.currentAuthors.length === 1 && this.currentAuthors[0] === SHOW_ALL_BRANCHES) ? null : this.currentAuthors,
+			tags: this.currentTags === null || (this.currentTags.length === 1 && this.currentTags[0] === SHOW_ALL_BRANCHES) ? null : this.currentTags,
 			maxCommits: this.maxCommits,
 			showTags: getShowTags(repoState.showTags),
 			showRemoteBranches: getShowRemoteBranches(repoState.showRemoteBranchesV2),
@@ -782,6 +820,7 @@ class GitGraphView {
 			avatars: this.avatars,
 			currentBranches: this.currentBranches,
 			currentAuthors: this.currentAuthors,
+			currentTags: this.currentTags,
 			moreCommitsAvailable: this.moreCommitsAvailable,
 			maxCommits: this.maxCommits,
 			onlyFollowFirstParent: this.onlyFollowFirstParent,
@@ -2366,6 +2405,7 @@ class GitGraphView {
 				this.repoDropdown.refresh();
 				this.branchDropdown.refresh();
 				this.authorDropdown.refresh();
+				this.tagDropdown.refresh();
 			}
 			if (fmc !== findMatchColour) {
 				findMatchColour = fmc;
@@ -2481,6 +2521,9 @@ class GitGraphView {
 					handledEvent(e);
 				} else if (this.authorDropdown.isOpen()) {
 					this.authorDropdown.close();
+					handledEvent(e);
+				} else if (this.tagDropdown.isOpen()) {
+					this.tagDropdown.close();
 					handledEvent(e);
 				} else if (this.settingsWidget.isVisible()) {
 					this.settingsWidget.close();

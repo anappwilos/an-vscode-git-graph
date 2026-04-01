@@ -106,10 +106,7 @@ export default [
 				}
 			],
 			'key-spacing': 'warn',
-			'linebreak-style': [
-				'warn',
-				'windows'
-			],
+			'linebreak-style': 'off',
 			'new-cap': 'warn',
 			'new-parens': 'warn',
 			'no-alert': 'error',

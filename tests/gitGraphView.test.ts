@@ -2368,7 +2368,7 @@ describe('GitGraphView', () => {
 							head: getRepoInfoResolvedValue.head,
 							remotes: getRepoInfoResolvedValue.remotes,
 							stashes: getRepoInfoResolvedValue.stashes,
-						tags: getRepoInfoResolvedValue.tags,
+							tags: getRepoInfoResolvedValue.tags,
 							isRepo: true,
 							error: getRepoInfoResolvedValue.error
 						}
@@ -2420,7 +2420,7 @@ describe('GitGraphView', () => {
 							head: getRepoInfoResolvedValue.head,
 							remotes: getRepoInfoResolvedValue.remotes,
 							stashes: getRepoInfoResolvedValue.stashes,
-						tags: getRepoInfoResolvedValue.tags,
+							tags: getRepoInfoResolvedValue.tags,
 							isRepo: true,
 							error: getRepoInfoResolvedValue.error
 						}
@@ -2473,7 +2473,7 @@ describe('GitGraphView', () => {
 							head: getRepoInfoResolvedValue.head,
 							remotes: getRepoInfoResolvedValue.remotes,
 							stashes: getRepoInfoResolvedValue.stashes,
-						tags: getRepoInfoResolvedValue.tags,
+							tags: getRepoInfoResolvedValue.tags,
 							isRepo: true,
 							error: getRepoInfoResolvedValue.error
 						}
@@ -2526,7 +2526,7 @@ describe('GitGraphView', () => {
 							head: getRepoInfoResolvedValue.head,
 							remotes: getRepoInfoResolvedValue.remotes,
 							stashes: getRepoInfoResolvedValue.stashes,
-						tags: getRepoInfoResolvedValue.tags,
+							tags: getRepoInfoResolvedValue.tags,
 							isRepo: false,
 							error: null
 						}

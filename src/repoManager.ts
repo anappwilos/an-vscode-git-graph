@@ -9,7 +9,7 @@ import { BooleanOverride, ErrorInfo, FileViewType, GitRepoSet, GitRepoState, Pul
 import { evalPromises, getPathFromStr, getPathFromUri, getRepoName, pathWithTrailingSlash, realpath, showErrorMessage, showInformationMessage } from './utils';
 import { BufferedQueue } from './utils/bufferedQueue';
 import { Disposable, toDisposable } from './utils/disposable';
-import { GgEvent, EventEmitter } from './utils/event';
+import { EventEmitter, GgEvent } from './utils/event';
 
 export interface RepoChangeEvent {
 	readonly repos: GitRepoSet;

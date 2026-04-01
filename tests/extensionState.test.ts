@@ -75,9 +75,11 @@ describe('ExtensionState', () => {
 				showRemoteBranchesV2: BooleanOverride.Enabled,
 				showStashes: BooleanOverride.Enabled,
 				showTags: BooleanOverride.Enabled,
+				simplifyByDecoration: BooleanOverride.Default,
+				isCdvSummaryHidden: false,
 				workspaceFolderIndex: 0
 			};
-			extensionContext.workspaceState.get.mockReturnValueOnce({
+			(extensionContext.workspaceState.get as jest.Mock).mockReturnValueOnce({
 				'/path/to/repo': repoState
 			});
 
@@ -92,7 +94,7 @@ describe('ExtensionState', () => {
 
 		it('Should assign missing repository state variables to their default values', () => {
 			// Setup
-			extensionContext.workspaceState.get.mockReturnValueOnce({
+			(extensionContext.workspaceState.get as jest.Mock).mockReturnValueOnce({
 				'/path/to/repo': {
 					columnWidths: null,
 					hideRemotes: []
@@ -123,6 +125,8 @@ describe('ExtensionState', () => {
 					showRemoteBranchesV2: BooleanOverride.Default,
 					showStashes: BooleanOverride.Default,
 					showTags: BooleanOverride.Default,
+					simplifyByDecoration: BooleanOverride.Default,
+					isCdvSummaryHidden: false,
 					workspaceFolderIndex: null
 				}
 			});
@@ -130,7 +134,7 @@ describe('ExtensionState', () => {
 
 		it('Should migrate showRemoteBranches = TRUE from boolean to enum (repository.showRemoteBranches = TRUE)', () => {
 			// Setup
-			extensionContext.workspaceState.get.mockReturnValueOnce({
+			(extensionContext.workspaceState.get as jest.Mock).mockReturnValueOnce({
 				'/path/to/repo': {
 					showRemoteBranches: true
 				}
@@ -161,6 +165,8 @@ describe('ExtensionState', () => {
 					showRemoteBranchesV2: BooleanOverride.Default,
 					showStashes: BooleanOverride.Default,
 					showTags: BooleanOverride.Default,
+					simplifyByDecoration: BooleanOverride.Default,
+					isCdvSummaryHidden: false,
 					workspaceFolderIndex: null
 				}
 			});
@@ -168,7 +174,7 @@ describe('ExtensionState', () => {
 
 		it('Should migrate showRemoteBranches = FALSE from boolean to enum (repository.showRemoteBranches = TRUE)', () => {
 			// Setup
-			extensionContext.workspaceState.get.mockReturnValueOnce({
+			(extensionContext.workspaceState.get as jest.Mock).mockReturnValueOnce({
 				'/path/to/repo': {
 					showRemoteBranches: false
 				}
@@ -199,6 +205,8 @@ describe('ExtensionState', () => {
 					showRemoteBranchesV2: BooleanOverride.Disabled,
 					showStashes: BooleanOverride.Default,
 					showTags: BooleanOverride.Default,
+					simplifyByDecoration: BooleanOverride.Default,
+					isCdvSummaryHidden: false,
 					workspaceFolderIndex: null
 				}
 			});
@@ -206,7 +214,7 @@ describe('ExtensionState', () => {
 
 		it('Should migrate showRemoteBranches = FALSE from boolean to enum (repository.showRemoteBranches = FALSE)', () => {
 			// Setup
-			extensionContext.workspaceState.get.mockReturnValueOnce({
+			(extensionContext.workspaceState.get as jest.Mock).mockReturnValueOnce({
 				'/path/to/repo': {
 					showRemoteBranches: false
 				}
@@ -237,6 +245,8 @@ describe('ExtensionState', () => {
 					showRemoteBranchesV2: BooleanOverride.Default,
 					showStashes: BooleanOverride.Default,
 					showTags: BooleanOverride.Default,
+					simplifyByDecoration: BooleanOverride.Default,
+					isCdvSummaryHidden: false,
 					workspaceFolderIndex: null
 				}
 			});
@@ -244,7 +254,7 @@ describe('ExtensionState', () => {
 
 		it('Should migrate showRemoteBranches = TRUE from boolean to enum (repository.showRemoteBranches = FALSE)', () => {
 			// Setup
-			extensionContext.workspaceState.get.mockReturnValueOnce({
+			(extensionContext.workspaceState.get as jest.Mock).mockReturnValueOnce({
 				'/path/to/repo': {
 					showRemoteBranches: true
 				}
@@ -275,6 +285,8 @@ describe('ExtensionState', () => {
 					showRemoteBranchesV2: BooleanOverride.Enabled,
 					showStashes: BooleanOverride.Default,
 					showTags: BooleanOverride.Default,
+					simplifyByDecoration: BooleanOverride.Default,
+					isCdvSummaryHidden: false,
 					workspaceFolderIndex: null
 				}
 			});
@@ -282,7 +294,7 @@ describe('ExtensionState', () => {
 
 		it('Should migrate multiple showRemoteBranches from boolean to enum (repository.showRemoteBranches = TRUE)', () => {
 			// Setup
-			extensionContext.workspaceState.get.mockReturnValueOnce({
+			(extensionContext.workspaceState.get as jest.Mock).mockReturnValueOnce({
 				'/path/to/repo-1': {
 					showRemoteBranches: true
 				},
@@ -316,6 +328,8 @@ describe('ExtensionState', () => {
 					showRemoteBranchesV2: BooleanOverride.Default,
 					showStashes: BooleanOverride.Default,
 					showTags: BooleanOverride.Default,
+					simplifyByDecoration: BooleanOverride.Default,
+					isCdvSummaryHidden: false,
 					workspaceFolderIndex: null
 				},
 				'/path/to/repo-2': {
@@ -337,6 +351,8 @@ describe('ExtensionState', () => {
 					showRemoteBranchesV2: BooleanOverride.Disabled,
 					showStashes: BooleanOverride.Default,
 					showTags: BooleanOverride.Default,
+					simplifyByDecoration: BooleanOverride.Default,
+					isCdvSummaryHidden: false,
 					workspaceFolderIndex: null
 				}
 			});
@@ -345,7 +361,7 @@ describe('ExtensionState', () => {
 
 		it('Should return the default value if it is not defined', () => {
 			// Setup
-			extensionContext.workspaceState.get.mockImplementationOnce((_, defaultValue) => defaultValue);
+			(extensionContext.workspaceState.get as jest.Mock).mockImplementationOnce((_, defaultValue) => defaultValue);
 
 			// Run
 			const result = extensionState.getRepos();
@@ -359,7 +375,7 @@ describe('ExtensionState', () => {
 		it('Should store the provided repositories in the workspace state', () => {
 			// Setup
 			const repos = {};
-			extensionContext.workspaceState.update.mockResolvedValueOnce(null);
+			(extensionContext.workspaceState.update as jest.Mock).mockResolvedValueOnce(null);
 
 			// Run
 			extensionState.saveRepos(repos);
@@ -372,9 +388,9 @@ describe('ExtensionState', () => {
 	describe('transferRepo', () => {
 		it('Should update the last active repo and code reviews with the new repository path', () => {
 			// Setup
-			extensionContext.workspaceState.get.mockReturnValueOnce('/path/to/repo');
-			extensionContext.workspaceState.update.mockResolvedValueOnce(null);
-			extensionContext.workspaceState.get.mockReturnValueOnce({
+			(extensionContext.workspaceState.get as jest.Mock).mockReturnValueOnce('/path/to/repo');
+			(extensionContext.workspaceState.update as jest.Mock).mockResolvedValueOnce(null);
+			(extensionContext.workspaceState.get as jest.Mock).mockReturnValueOnce({
 				'/path/to/repo': {
 					'a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2': {
 						lastActive: 1587559258000,
@@ -383,7 +399,7 @@ describe('ExtensionState', () => {
 					}
 				}
 			});
-			extensionContext.workspaceState.update.mockResolvedValueOnce(null);
+			(extensionContext.workspaceState.update as jest.Mock).mockResolvedValueOnce(null);
 
 			// Run
 			extensionState.transferRepo('/path/to/repo', '/new/path/to/repo');
@@ -403,8 +419,8 @@ describe('ExtensionState', () => {
 
 		it('Shouldn\'t update the last active repo or code reviews when no match is found with the transfer repository', () => {
 			// Setup
-			extensionContext.workspaceState.get.mockReturnValueOnce('/path/to/repo');
-			extensionContext.workspaceState.get.mockReturnValueOnce({
+			(extensionContext.workspaceState.get as jest.Mock).mockReturnValueOnce('/path/to/repo');
+			(extensionContext.workspaceState.get as jest.Mock).mockReturnValueOnce({
 				'/path/to/repo': {
 					'a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2': {
 						lastActive: 1587559258000,
@@ -430,7 +446,7 @@ describe('ExtensionState', () => {
 				issueLinkingConfig: null,
 				pushTagSkipRemoteCheck: false
 			};
-			extensionContext.globalState.get.mockReturnValueOnce(globalViewState);
+			(extensionContext.globalState.get as jest.Mock).mockReturnValueOnce(globalViewState);
 
 			// Run
 			const result = extensionState.getGlobalViewState();
@@ -442,7 +458,7 @@ describe('ExtensionState', () => {
 
 		it('Should assign missing global view state variables to their default values', () => {
 			// Setup
-			extensionContext.globalState.get.mockReturnValueOnce({
+			(extensionContext.globalState.get as jest.Mock).mockReturnValueOnce({
 				issueLinkingConfig: null
 			});
 
@@ -460,7 +476,7 @@ describe('ExtensionState', () => {
 
 		it('Should return the default global view state if it is not defined', () => {
 			// Setup
-			extensionContext.globalState.get.mockImplementationOnce((_, defaultValue) => defaultValue);
+			(extensionContext.globalState.get as jest.Mock).mockImplementationOnce((_, defaultValue) => defaultValue);
 
 			// Run
 			const result = extensionState.getGlobalViewState();
@@ -483,7 +499,7 @@ describe('ExtensionState', () => {
 				issueLinkingConfig: null,
 				pushTagSkipRemoteCheck: false
 			};
-			extensionContext.globalState.update.mockResolvedValueOnce(null);
+			(extensionContext.globalState.update as jest.Mock).mockResolvedValueOnce(null);
 
 			// Run
 			const result = await extensionState.setGlobalViewState(globalViewState);
@@ -500,7 +516,7 @@ describe('ExtensionState', () => {
 				issueLinkingConfig: null,
 				pushTagSkipRemoteCheck: false
 			};
-			extensionContext.globalState.update.mockRejectedValueOnce(null);
+			(extensionContext.globalState.update as jest.Mock).mockRejectedValueOnce(null);
 
 			// Run
 			const result = await extensionState.setGlobalViewState(globalViewState);
@@ -519,7 +535,7 @@ describe('ExtensionState', () => {
 				findIsRegex: false,
 				findOpenCommitDetailsView: true
 			};
-			extensionContext.workspaceState.get.mockReturnValueOnce(workspaceViewState);
+			(extensionContext.workspaceState.get as jest.Mock).mockReturnValueOnce(workspaceViewState);
 
 			// Run
 			const result = extensionState.getWorkspaceViewState();
@@ -531,7 +547,7 @@ describe('ExtensionState', () => {
 
 		it('Should assign missing workspace view state variables to their default values', () => {
 			// Setup
-			extensionContext.workspaceState.get.mockReturnValueOnce({
+			(extensionContext.workspaceState.get as jest.Mock).mockReturnValueOnce({
 				findIsCaseSensitive: true,
 				findIsRegex: false
 			});
@@ -550,7 +566,7 @@ describe('ExtensionState', () => {
 
 		it('Should return the default workspace view state if it is not defined', () => {
 			// Setup
-			extensionContext.workspaceState.get.mockImplementationOnce((_, defaultValue) => defaultValue);
+			(extensionContext.workspaceState.get as jest.Mock).mockImplementationOnce((_, defaultValue) => defaultValue);
 
 			// Run
 			const result = extensionState.getWorkspaceViewState();
@@ -573,7 +589,7 @@ describe('ExtensionState', () => {
 				findIsRegex: false,
 				findOpenCommitDetailsView: true
 			};
-			extensionContext.workspaceState.update.mockResolvedValueOnce(null);
+			(extensionContext.workspaceState.update as jest.Mock).mockResolvedValueOnce(null);
 
 			// Run
 			const result = await extensionState.setWorkspaceViewState(workspaceViewState);
@@ -590,7 +606,7 @@ describe('ExtensionState', () => {
 				findIsRegex: false,
 				findOpenCommitDetailsView: true
 			};
-			extensionContext.workspaceState.update.mockRejectedValueOnce(null);
+			(extensionContext.workspaceState.update as jest.Mock).mockRejectedValueOnce(null);
 
 			// Run
 			const result = await extensionState.setWorkspaceViewState(workspaceViewState);
@@ -605,7 +621,7 @@ describe('ExtensionState', () => {
 		it('Should return the stored ignored repositories', () => {
 			// Setup
 			const ignoredRepos = ['/ignored-repo1'];
-			extensionContext.workspaceState.get.mockReturnValueOnce(ignoredRepos);
+			(extensionContext.workspaceState.get as jest.Mock).mockReturnValueOnce(ignoredRepos);
 
 			// Run
 			const result = extensionState.getIgnoredRepos();
@@ -617,7 +633,7 @@ describe('ExtensionState', () => {
 
 		it('Should return the default value if not defined', () => {
 			// Setup
-			extensionContext.workspaceState.get.mockImplementationOnce((_, defaultValue) => defaultValue);
+			(extensionContext.workspaceState.get as jest.Mock).mockImplementationOnce((_, defaultValue) => defaultValue);
 
 			// Run
 			const result = extensionState.getIgnoredRepos();
@@ -632,7 +648,7 @@ describe('ExtensionState', () => {
 		it('Should successfully store the ignored repositories', async () => {
 			// Setup
 			const ignoreRepos = ['/path/to/ignore'];
-			extensionContext.workspaceState.update.mockResolvedValueOnce(null);
+			(extensionContext.workspaceState.update as jest.Mock).mockResolvedValueOnce(null);
 
 			// Run
 			const result = await extensionState.setIgnoredRepos(ignoreRepos);
@@ -645,7 +661,7 @@ describe('ExtensionState', () => {
 		it('Should return an error message when vscode is unable to store the ignored repositories', async () => {
 			// Setup
 			const ignoreRepos = ['/path/to/ignore'];
-			extensionContext.workspaceState.update.mockRejectedValueOnce(null);
+			(extensionContext.workspaceState.update as jest.Mock).mockRejectedValueOnce(null);
 
 			// Run
 			const result = await extensionState.setIgnoredRepos(ignoreRepos);
@@ -659,7 +675,7 @@ describe('ExtensionState', () => {
 	describe('getLastActiveRepo', () => {
 		it('Should return the stored last active repository', () => {
 			// Setup
-			extensionContext.workspaceState.get.mockReturnValueOnce('/last/active/repo');
+			(extensionContext.workspaceState.get as jest.Mock).mockReturnValueOnce('/last/active/repo');
 
 			// Run
 			const result = extensionState.getLastActiveRepo();
@@ -671,7 +687,7 @@ describe('ExtensionState', () => {
 
 		it('Should return the default value if not defined', () => {
 			// Setup
-			extensionContext.workspaceState.get.mockImplementationOnce((_, defaultValue) => defaultValue);
+			(extensionContext.workspaceState.get as jest.Mock).mockImplementationOnce((_, defaultValue) => defaultValue);
 
 			// Run
 			const result = extensionState.getLastActiveRepo();
@@ -685,7 +701,7 @@ describe('ExtensionState', () => {
 	describe('setLastActiveRepo', () => {
 		it('Should store the last active repository', () => {
 			// Setup
-			extensionContext.workspaceState.update.mockResolvedValueOnce(null);
+			(extensionContext.workspaceState.update as jest.Mock).mockResolvedValueOnce(null);
 
 			// Run
 			extensionState.setLastActiveRepo('/path/to/repo');
@@ -698,7 +714,7 @@ describe('ExtensionState', () => {
 	describe('getLastKnownGitPath', () => {
 		it('Should return the stored last active repository', () => {
 			// Setup
-			extensionContext.globalState.get.mockReturnValueOnce('/path/to/git');
+			(extensionContext.globalState.get as jest.Mock).mockReturnValueOnce('/path/to/git');
 
 			// Run
 			const result = extensionState.getLastKnownGitPath();
@@ -710,7 +726,7 @@ describe('ExtensionState', () => {
 
 		it('Should return the default value if not defined', () => {
 			// Setup
-			extensionContext.globalState.get.mockImplementationOnce((_, defaultValue) => defaultValue);
+			(extensionContext.globalState.get as jest.Mock).mockImplementationOnce((_, defaultValue) => defaultValue);
 
 			// Run
 			const result = extensionState.getLastKnownGitPath();
@@ -725,7 +741,7 @@ describe('ExtensionState', () => {
 		it('Should return TRUE if the avatar storage folder existed on startup', () => {
 			// Setup
 			const spyOnStat = jest.spyOn(fs, 'stat');
-			spyOnStat.mockImplementationOnce((_, callback) => callback(null, {} as fs.Stats));
+			spyOnStat.mockImplementationOnce(((_: any, callback: any) => callback(null, {} as fs.Stats)) as any);
 			const extensionState = new ExtensionState(extensionContext, onDidChangeGitExecutable.subscribe);
 
 			// Run
@@ -741,9 +757,9 @@ describe('ExtensionState', () => {
 
 		it('Should return TRUE if the avatar storage folder was successfully created', () => {
 			// Setup
-			jest.spyOn(fs, 'stat').mockImplementationOnce((_, callback) => callback(new Error(), {} as fs.Stats));
+			jest.spyOn(fs, 'stat').mockImplementationOnce(((_: any, callback: any) => callback(new Error(), {} as fs.Stats)) as any);
 			const spyOnMkdir = jest.spyOn(fs, 'mkdir');
-			spyOnMkdir.mockImplementation((_, callback) => callback(null));
+			spyOnMkdir.mockImplementation(((_: any, callback: any) => callback(null)) as any);
 			const extensionState = new ExtensionState(extensionContext, onDidChangeGitExecutable.subscribe);
 
 			// Run
@@ -760,9 +776,9 @@ describe('ExtensionState', () => {
 
 		it('Should return TRUE if the avatar storage folder was created after the initial stat check', () => {
 			// Setup
-			jest.spyOn(fs, 'stat').mockImplementationOnce((_, callback) => callback(new Error(), {} as fs.Stats));
+			jest.spyOn(fs, 'stat').mockImplementationOnce(((_: any, callback: any) => callback(new Error(), {} as fs.Stats)) as any);
 			const spyOnMkdir = jest.spyOn(fs, 'mkdir');
-			spyOnMkdir.mockImplementation((_, callback) => callback({ code: 'EEXIST' } as NodeJS.ErrnoException));
+			spyOnMkdir.mockImplementation(((_: any, callback: any) => callback({ code: 'EEXIST' } as NodeJS.ErrnoException)) as any);
 			const extensionState = new ExtensionState(extensionContext, onDidChangeGitExecutable.subscribe);
 
 			// Run
@@ -779,9 +795,9 @@ describe('ExtensionState', () => {
 
 		it('Should return FALSE if the avatar storage folder could not be created', () => {
 			// Setup
-			jest.spyOn(fs, 'stat').mockImplementationOnce((_, callback) => callback(new Error(), {} as fs.Stats));
+			jest.spyOn(fs, 'stat').mockImplementationOnce(((_: any, callback: any) => callback(new Error(), {} as fs.Stats)) as any);
 			const spyOnMkdir = jest.spyOn(fs, 'mkdir');
-			spyOnMkdir.mockImplementation((_, callback) => callback({} as NodeJS.ErrnoException));
+			spyOnMkdir.mockImplementation(((_: any, callback: any) => callback({} as NodeJS.ErrnoException)) as any);
 			const extensionState = new ExtensionState(extensionContext, onDidChangeGitExecutable.subscribe);
 
 			// Run
@@ -811,7 +827,7 @@ describe('ExtensionState', () => {
 		it('Should return the stored avatar cache', () => {
 			// Setup
 			const cache = {};
-			extensionContext.globalState.get.mockReturnValueOnce(cache);
+			(extensionContext.globalState.get as jest.Mock).mockReturnValueOnce(cache);
 
 			// Run
 			const result = extensionState.getAvatarCache();
@@ -823,7 +839,7 @@ describe('ExtensionState', () => {
 
 		it('Should return the default value if not defined', () => {
 			// Setup
-			extensionContext.globalState.get.mockImplementationOnce((_, defaultValue) => defaultValue);
+			(extensionContext.globalState.get as jest.Mock).mockImplementationOnce((_, defaultValue) => defaultValue);
 
 			// Run
 			const result = extensionState.getAvatarCache();
@@ -838,8 +854,8 @@ describe('ExtensionState', () => {
 		it('Should save the avatar to the avatar cache', () => {
 			// Setup
 			const avatar = { image: 'name.jpg', timestamp: 0, identicon: false };
-			extensionContext.globalState.get.mockReturnValueOnce({});
-			extensionContext.globalState.update.mockResolvedValueOnce(null);
+			(extensionContext.globalState.get as jest.Mock).mockReturnValueOnce({});
+			(extensionContext.globalState.update as jest.Mock).mockResolvedValueOnce(null);
 
 			// Run
 			extensionState.saveAvatar('test@example.com', avatar);
@@ -853,11 +869,11 @@ describe('ExtensionState', () => {
 		it('Should remove an avatar from the cache', () => {
 			// Setup
 			const avatar = { image: 'name.jpg', timestamp: 0, identicon: false };
-			extensionContext.globalState.get.mockReturnValueOnce({
+			(extensionContext.globalState.get as jest.Mock).mockReturnValueOnce({
 				'test1@example.com': avatar,
 				'test2@example.com': avatar
 			});
-			extensionContext.globalState.update.mockResolvedValueOnce(null);
+			(extensionContext.globalState.update as jest.Mock).mockResolvedValueOnce(null);
 
 			// Run
 			extensionState.removeAvatarFromCache('test1@example.com');
@@ -876,7 +892,7 @@ describe('ExtensionState', () => {
 
 		it('Should clear all avatars from the cache and delete all avatars that are currently stored on the file system', async () => {
 			// Setup
-			extensionContext.globalState.update.mockResolvedValueOnce(null);
+			(extensionContext.globalState.update as jest.Mock).mockResolvedValueOnce(null);
 			spyOnReaddir.mockImplementationOnce((_, callback) => callback(null, ['file1.jpg', 'file2.jpg']));
 			spyOnUnlink.mockImplementationOnce((_, callback) => callback(null));
 			spyOnUnlink.mockImplementationOnce((_, callback) => callback(null));
@@ -896,7 +912,7 @@ describe('ExtensionState', () => {
 
 		it('Should skip deleting avatars on the file system if they could not be listed from the file system', async () => {
 			// Setup
-			extensionContext.globalState.update.mockResolvedValueOnce(null);
+			(extensionContext.globalState.update as jest.Mock).mockResolvedValueOnce(null);
 			spyOnReaddir.mockImplementationOnce((_, callback) => callback(new Error(), ['file1.jpg', 'file2.jpg']));
 
 			// Run
@@ -912,7 +928,7 @@ describe('ExtensionState', () => {
 
 		it('Shouldn\'t delete avatars on the file system if globalState.update rejects, and return the error message', async () => {
 			// Setup
-			extensionContext.globalState.update.mockRejectedValueOnce(null);
+			(extensionContext.globalState.update as jest.Mock).mockRejectedValueOnce(null);
 
 			// Run
 			const result = await extensionState.clearAvatarCache();
@@ -928,8 +944,8 @@ describe('ExtensionState', () => {
 		it('Should store the code review (in a repository with no prior code reviews)', async () => {
 			// Setup
 			const codeReviews = {};
-			extensionContext.workspaceState.get.mockReturnValueOnce(codeReviews);
-			extensionContext.workspaceState.update.mockResolvedValueOnce(null);
+			(extensionContext.workspaceState.get as jest.Mock).mockReturnValueOnce(codeReviews);
+			(extensionContext.workspaceState.update as jest.Mock).mockResolvedValueOnce(null);
 
 			// Run
 			const result = await extensionState.startCodeReview('/path/to/repo', 'a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2', ['file2.txt', 'file3.txt'], 'file1.txt');
@@ -966,8 +982,8 @@ describe('ExtensionState', () => {
 					}
 				}
 			};
-			extensionContext.workspaceState.get.mockReturnValueOnce(codeReviews);
-			extensionContext.workspaceState.update.mockResolvedValueOnce(null);
+			(extensionContext.workspaceState.get as jest.Mock).mockReturnValueOnce(codeReviews);
+			(extensionContext.workspaceState.update as jest.Mock).mockResolvedValueOnce(null);
 
 			// Run
 			const result = await extensionState.startCodeReview('/path/to/repo', '1a2b3c4d5e6f1a2b3c4d5e6f1a2b3c4d5e6f1a2b', ['file5.txt', 'file6.txt'], 'file4.txt');
@@ -1001,8 +1017,8 @@ describe('ExtensionState', () => {
 		it('Should return an error message when vscode is unable to store the code reviews', async () => {
 			// Setup
 			const codeReviews = {};
-			extensionContext.workspaceState.get.mockReturnValueOnce(codeReviews);
-			extensionContext.workspaceState.update.mockRejectedValueOnce(null);
+			(extensionContext.workspaceState.get as jest.Mock).mockReturnValueOnce(codeReviews);
+			(extensionContext.workspaceState.update as jest.Mock).mockRejectedValueOnce(null);
 
 			// Run
 			const result = await extensionState.startCodeReview('/path/to/repo', 'a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2', ['file2.txt', 'file3.txt'], 'file1.txt');
@@ -1024,8 +1040,8 @@ describe('ExtensionState', () => {
 					}
 				}
 			};
-			extensionContext.workspaceState.get.mockReturnValueOnce(codeReviews);
-			extensionContext.workspaceState.update.mockResolvedValueOnce(null);
+			(extensionContext.workspaceState.get as jest.Mock).mockReturnValueOnce(codeReviews);
+			(extensionContext.workspaceState.update as jest.Mock).mockResolvedValueOnce(null);
 
 			// Run
 			const result = await extensionState.endCodeReview('/path/to/repo', 'a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2');
@@ -1051,8 +1067,8 @@ describe('ExtensionState', () => {
 					}
 				}
 			};
-			extensionContext.workspaceState.get.mockReturnValueOnce(codeReviews);
-			extensionContext.workspaceState.update.mockResolvedValueOnce(null);
+			(extensionContext.workspaceState.get as jest.Mock).mockReturnValueOnce(codeReviews);
+			(extensionContext.workspaceState.update as jest.Mock).mockResolvedValueOnce(null);
 
 			// Run
 			const result = await extensionState.endCodeReview('/path/to/repo', 'a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2');
@@ -1081,8 +1097,8 @@ describe('ExtensionState', () => {
 					}
 				}
 			};
-			extensionContext.workspaceState.get.mockReturnValueOnce(codeReviews);
-			extensionContext.workspaceState.update.mockResolvedValueOnce(null);
+			(extensionContext.workspaceState.get as jest.Mock).mockReturnValueOnce(codeReviews);
+			(extensionContext.workspaceState.update as jest.Mock).mockResolvedValueOnce(null);
 
 			// Run
 			const result = await extensionState.endCodeReview('/path/to/repo', '1a2b3c4d5e6f1a2b3c4d5e6f1a2b3c4d5e6f1a2b');
@@ -1111,8 +1127,8 @@ describe('ExtensionState', () => {
 					}
 				}
 			};
-			extensionContext.workspaceState.get.mockReturnValueOnce(codeReviews);
-			extensionContext.workspaceState.update.mockRejectedValueOnce(null);
+			(extensionContext.workspaceState.get as jest.Mock).mockReturnValueOnce(codeReviews);
+			(extensionContext.workspaceState.update as jest.Mock).mockRejectedValueOnce(null);
 
 			// Run
 			const result = await extensionState.endCodeReview('/path/to/repo', 'a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2');
@@ -1134,8 +1150,8 @@ describe('ExtensionState', () => {
 					}
 				}
 			};
-			extensionContext.workspaceState.get.mockReturnValueOnce(codeReviews);
-			extensionContext.workspaceState.update.mockResolvedValueOnce(null);
+			(extensionContext.workspaceState.get as jest.Mock).mockReturnValueOnce(codeReviews);
+			(extensionContext.workspaceState.update as jest.Mock).mockResolvedValueOnce(null);
 
 			// Run
 			const result = extensionState.getCodeReview('/path/to/repo', 'a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2');
@@ -1169,7 +1185,7 @@ describe('ExtensionState', () => {
 					}
 				}
 			};
-			extensionContext.workspaceState.get.mockReturnValueOnce(codeReviews);
+			(extensionContext.workspaceState.get as jest.Mock).mockReturnValueOnce(codeReviews);
 
 			// Run
 			const result = extensionState.getCodeReview('/path/to/repo1', 'a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2');
@@ -1189,7 +1205,7 @@ describe('ExtensionState', () => {
 					}
 				}
 			};
-			extensionContext.workspaceState.get.mockReturnValueOnce(codeReviews);
+			(extensionContext.workspaceState.get as jest.Mock).mockReturnValueOnce(codeReviews);
 
 			// Run
 			const result = extensionState.getCodeReview('/path/to/repo', '1a2b3c4d5e6f1a2b3c4d5e6f1a2b3c4d5e6f1a2b');
@@ -1216,8 +1232,8 @@ describe('ExtensionState', () => {
 				}
 			};
 
-			extensionContext.workspaceState.get.mockReturnValueOnce(codeReviews);
-			extensionContext.workspaceState.update.mockResolvedValueOnce(null);
+			(extensionContext.workspaceState.get as jest.Mock).mockReturnValueOnce(codeReviews);
+			(extensionContext.workspaceState.update as jest.Mock).mockResolvedValueOnce(null);
 		});
 
 		it('Should update the reviewed files and change the last viewed file', async () => {
@@ -1317,8 +1333,8 @@ describe('ExtensionState', () => {
 
 		it('Should return an error message when workspaceState.update rejects', async () => {
 			// Setup
-			extensionContext.workspaceState.update.mockReset();
-			extensionContext.workspaceState.update.mockRejectedValueOnce(null);
+			(extensionContext.workspaceState.update as jest.Mock).mockReset();
+			(extensionContext.workspaceState.update as jest.Mock).mockRejectedValueOnce(null);
 
 			// Run
 			const result = await extensionState.updateCodeReview(repo, id, ['file3.txt'], 'file2.txt');
@@ -1352,8 +1368,8 @@ describe('ExtensionState', () => {
 					}
 				}
 			};
-			extensionContext.workspaceState.get.mockReturnValueOnce(codeReviews);
-			extensionContext.workspaceState.update.mockResolvedValueOnce(null);
+			(extensionContext.workspaceState.get as jest.Mock).mockReturnValueOnce(codeReviews);
+			(extensionContext.workspaceState.update as jest.Mock).mockResolvedValueOnce(null);
 
 			// Run
 			extensionState.expireOldCodeReviews();
@@ -1393,7 +1409,7 @@ describe('ExtensionState', () => {
 					}
 				}
 			};
-			extensionContext.workspaceState.get.mockReturnValueOnce(codeReviews);
+			(extensionContext.workspaceState.get as jest.Mock).mockReturnValueOnce(codeReviews);
 
 			// Run
 			extensionState.expireOldCodeReviews();
@@ -1406,7 +1422,7 @@ describe('ExtensionState', () => {
 	describe('endAllWorkspaceCodeReviews', () => {
 		it('Should store the last active repository', () => {
 			// Setup
-			extensionContext.workspaceState.update.mockResolvedValueOnce(null);
+			(extensionContext.workspaceState.update as jest.Mock).mockResolvedValueOnce(null);
 
 			// Run
 			extensionState.endAllWorkspaceCodeReviews();
@@ -1420,7 +1436,7 @@ describe('ExtensionState', () => {
 		it('Should return the stored code reviews', () => {
 			// Setup
 			const codeReviews = {};
-			extensionContext.workspaceState.get.mockReturnValueOnce(codeReviews);
+			(extensionContext.workspaceState.get as jest.Mock).mockReturnValueOnce(codeReviews);
 
 			// Run
 			const result = extensionState.getCodeReviews();
@@ -1432,7 +1448,7 @@ describe('ExtensionState', () => {
 
 		it('Should return the default value if not defined', () => {
 			// Setup
-			extensionContext.workspaceState.get.mockImplementationOnce((_, defaultValue) => defaultValue);
+			(extensionContext.workspaceState.get as jest.Mock).mockImplementationOnce((_, defaultValue) => defaultValue);
 
 			// Run
 			const result = extensionState.getCodeReviews();

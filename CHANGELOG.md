@@ -1,5 +1,37 @@
 # Change Log
 
+## 1.31.6 - 2026-04-01
+* Tag filtering: a new Tags Dropdown in the Git Graph View allows filtering commits by one or more tags.
+* Tag details and signature verification are now shown in the "View Tag Details" dialog.
+* Lazy activation: the extension now activates only on `onCommand:git-graph.view`, `onCommand:git-graph.version`, and `workspaceContains:.git` instead of `"*"`, reducing VS Code startup time.
+* Panel/sidebar view: Git Graph can now be opened as a sidebar panel via `git-graph.view` command, in addition to the existing tab view (`git-graph.openInPanel`).
+* Bulk commit operations: squash, drop, and undo are now available from the commit context menu.
+* New repository settings: `git-graph.repository.simplifyByDecoration`, `git-graph.repository.singleAuthorSelect`, `git-graph.repository.singleBranchSelect`, `git-graph.viewLocation`, `git-graph.toolbarButtonVisibility`, `git-graph.dialog.merge.allowUnrelatedHistories`, `git-graph.commitDetailsView.autoScroll`.
+* Context menu additions: `branch.createBranch`, `branch.pull`, `commit.undo`, `remoteBranch.createBranch`.
+* Find Widget improvements ported from git-hub-tig.
+* Internal refactor: `Event` and `EventListener` renamed to `GgEvent` and `GgEventListener` to avoid collision with the DOM `Event` type.
+* Internal architecture: `GitGraphView` split into `BaseGitGraphView` + `GitGraphView` + `GitGraphPanelView`.
+* Toolchain updated to TypeScript 5, Jest 29, ESLint 9 flat config.
+
+## 1.31.0-beta.3 - 2021-07-xx
+* #557 Improved context menu click event handling.
+* #547 Improved Git backwards compatibility when force deleting branches.
+
+## 1.31.0-beta.2 - 2021-xx-xx
+* #517 The visibility of actions in the Commit Details View's File Context Menu can now be controlled via the extension setting `git-graph.contextMenuActionsVisibility`.
+* #516 New "Reset File to this Revision..." action on the File Context Menu in the Commit Details View.
+* #507 Display a warning before pushing a tag when it's on a commit that isn't on any known branch on the remote(s) the tag is being pushed to.
+
+## 1.31.0-beta.1 - 2021-xx-xx
+* #499 If a branch's name contains an issue number, the issue can be viewed via the branch's context menu.
+
+## 1.31.0-beta.0 - 2021-xx-xx
+* #498 Verify and display the signature status of signed tags on the "View Details" Dialog.
+* Display a success or error message once `git-graph.clearAvatarCache` has executed.
+* #494 Logging Enhancements: transform empty args, and logging command invocations.
+* Improved the GitGraphView's message handling and logging.
+* Added complete unit test coverage of GitGraphView (back-end).
+
 ## 1.30.0 - 2021-04-05
 * #395 Added a "Force Fetch" option onto the "Fetch into Local Branch" Dialog, allowing any local branch (that's not checked out) to be reset to the remote branch. This dialog is accessed via the Remote Branch Context Menu.
 * #457 New "View Diff with Working File" action on the File Context Menu in the Commit Details View.

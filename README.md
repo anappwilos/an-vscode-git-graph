@@ -4,16 +4,20 @@
 
 # Git Graph extension for Visual Studio Code
 
-[![Visual Studio Marketplace Version](https://img.shields.io/visual-studio-marketplace/v/mhutchie.git-graph)](https://marketplace.visualstudio.com/items?itemName=mhutchie.git-graph)
-[![Visual Studio Marketplace Downloads](https://img.shields.io/visual-studio-marketplace/d/mhutchie.git-graph)](https://marketplace.visualstudio.com/items?itemName=mhutchie.git-graph)
+[![Visual Studio Marketplace Version](https://img.shields.io/visual-studio-marketplace/v/anappwilos.git-graph-2)](https://marketplace.visualstudio.com/items?itemName=anappwilos.git-graph-2)
+[![Visual Studio Marketplace Downloads](https://img.shields.io/visual-studio-marketplace/d/anappwilos.git-graph-2)](https://marketplace.visualstudio.com/items?itemName=anappwilos.git-graph-2)
 
-Git Graph is an open-source Visual Studio Code extension that visualizes Git history as an interactive graph and lets you perform common Git actions from a single view.
+Git Graph 2 is a community fork of the Git Graph extension for Visual Studio Code. It merges the best features from the [hansu](https://github.com/hansu/vscode-git-graph) and [git-hub-tig](https://github.com/git-hub-tig/vscode-git-graph) forks on top of the original [mhutchie/vscode-git-graph](https://github.com/mhutchie/vscode-git-graph) — adding panel/sidebar view, bulk commit operations, tag filtering, and a modernised toolchain.
 
 **Key benefits**
 
-- Understand branch and merge history at a glance.
+- Understand branch, tag, and merge history at a glance.
 - Review commits, diffs, and file changes faster.
+- Filter the graph by branches **and tags** simultaneously.
+- Open Git Graph as a tab or as a **sidebar panel**.
+- Perform bulk commit operations (squash, drop, undo) without leaving the graph.
 - Work efficiently with medium and large repositories using performance-focused options.
+- Activates lazily — no startup cost unless you open Git Graph.
 
 ![Recording of Git Graph](https://github.com/mhutchie/vscode-git-graph/raw/master/resources/demo.gif)
 
@@ -54,7 +58,31 @@ npm run compile-web -- --watch
 
 - Interactive graph with local/remote branches, tags, and stashes.
 - Hover tooltips that show branch/tag/stash inclusion and HEAD ancestry.
-- Filter which branches are displayed using the Branches dropdown.
+- Filter which branches are displayed using the **Branches** dropdown.
+- **Tag filtering** — filter commits by one or more tags using the new **Tags** dropdown.
+
+### Panel and sidebar view *(new in 1.31.6)*
+
+- Open Git Graph as a **sidebar panel** via `git-graph.view`, in addition to the existing editor tab view.
+- Control view placement with `git-graph.viewLocation` (`Tab` or `Panel`).
+- Show/hide individual toolbar buttons with `git-graph.toolbarButtonVisibility`.
+- Auto-scroll the Commit Details View to the selected commit with `git-graph.commitDetailsView.autoScroll`.
+
+### Bulk commit operations *(new in 1.31.6)*
+
+- **Squash**, **drop**, and **undo** commits directly from the commit context menu.
+- New context menu actions: `branch.createBranch`, `branch.pull`, `commit.undo`, `remoteBranch.createBranch`.
+
+### Tag details and signing *(new in 1.31.6)*
+
+- View tag details including signature verification status in the "View Tag Details" dialog.
+- `git-graph.repository.sign.tags` to GPG-sign tags created by Git Graph.
+
+### Repository filtering *(new in 1.31.6)*
+
+- `git-graph.repository.simplifyByDecoration`: simplify the graph to only decorated commits.
+- `git-graph.repository.singleAuthorSelect`: restrict the Authors filter to a single selection.
+- `git-graph.repository.singleBranchSelect`: restrict the Branches filter to a single selection.
 
 ### Commit inspection & comparison
 
@@ -64,14 +92,14 @@ npm run compile-web -- --watch
 
 ### Git actions from the UI
 
-- Create, checkout, rename, delete, merge, rebase, reset, fetch, pull, and push branches.
+- Create, checkout, rename, delete, merge (`allowUnrelatedHistories` option available), rebase, reset, fetch, pull, and push branches.
 - Add, delete, and push tags (annotated or lightweight).
 - Stash actions: apply, pop, drop, and create branch from stash.
 - Open files, copy hashes and ref names, and view annotated tag details.
 
 ### Integrations & workflow helpers
 
-- Issue linking in commit messages.
+- Issue linking in commit messages (detected from branch name patterns).
 - Pull request creation with GitHub, GitLab, and Bitbucket providers (plus custom providers).
 - Repository settings widget for remotes and integrations.
 
@@ -101,6 +129,16 @@ Git Graph offers a wide range of configuration options for graph style, performa
 - `git-graph.repository.showRemoteBranches`: Show/hide remote branches by default.
 - `git-graph.repository.fetchAndPrune`: Prune stale refs when fetching.
 - `git-graph.commitDetailsView.location`: Inline or docked details view.
+- `git-graph.commitDetailsView.autoScroll`: Auto-scroll to the selected commit in the details view.
+
+**New in 1.31.6**
+
+- `git-graph.viewLocation`: Where to open Git Graph (`Tab` or `Panel`).
+- `git-graph.toolbarButtonVisibility`: Show or hide individual toolbar buttons.
+- `git-graph.repository.simplifyByDecoration`: Show only decorated commits.
+- `git-graph.repository.singleAuthorSelect`: Limit author filter to one author at a time.
+- `git-graph.repository.singleBranchSelect`: Limit branch filter to one branch at a time.
+- `git-graph.dialog.merge.allowUnrelatedHistories`: Enable `--allow-unrelated-histories` on merge dialogs.
 
 **Examples**
 
@@ -123,17 +161,18 @@ This extension also consumes `git.path` to locate a portable Git installation.
 
 ## Commands
 
-| Command                                    | Description                                     |
-| ------------------------------------------ | ----------------------------------------------- |
-| `git-graph.view`                           | Open Git Graph.                                 |
-| `git-graph.fetch`                          | Open Git Graph and fetch from remotes.          |
-| `git-graph.addGitRepository`               | Add a Git repository to Git Graph.              |
-| `git-graph.removeGitRepository`            | Remove a Git repository from Git Graph.         |
-| `git-graph.clearAvatarCache`               | Clear cached avatars.                           |
-| `git-graph.endAllWorkspaceCodeReviews`     | End all code reviews in the workspace.          |
-| `git-graph.endSpecificWorkspaceCodeReview` | End a specific code review in the workspace.    |
-| `git-graph.resumeWorkspaceCodeReview`      | Resume a specific code review in the workspace. |
-| `git-graph.version`                        | Show Git Graph version information.             |
+| Command                                    | Description                                      |
+| ------------------------------------------ | ------------------------------------------------ |
+| `git-graph.view`                           | Open Git Graph (tab or panel, per settings).     |
+| `git-graph.openInPanel`                    | Open Git Graph as a sidebar panel.               |
+| `git-graph.fetch`                          | Open Git Graph and fetch from remotes.           |
+| `git-graph.addGitRepository`               | Add a Git repository to Git Graph.               |
+| `git-graph.removeGitRepository`            | Remove a Git repository from Git Graph.          |
+| `git-graph.clearAvatarCache`               | Clear cached avatars.                            |
+| `git-graph.endAllWorkspaceCodeReviews`     | End all code reviews in the workspace.           |
+| `git-graph.endSpecificWorkspaceCodeReview` | End a specific code review in the workspace.     |
+| `git-graph.resumeWorkspaceCodeReview`      | Resume a specific code review in the workspace.  |
+| `git-graph.version`                        | Show Git Graph version information.              |
 
 ## Performance Tips
 
